@@ -6,6 +6,16 @@ services:
       - "8080:5000"
     volumes:
       - ./data:/app/data
+      - ./static:/app/static
+      - ./templates:/app/templates
+      - ./translations/de/LC_MESSAGES/messages.po:/app/translations/de/LC_MESSAGES/messages.po
+      - ./translations/en/LC_MESSAGES/messages.po:/app/translations/en/LC_MESSAGES/messages.po
+      - ./app.py:/app/app.py
+      - ./config.py:/app/config.py
+      - ./encryption.py:/app/encryption.py
     env_file:
       - .env
     restart: unless-stopped
+    environment:
+      - FLASK_DEBUG=1  # Aktiviert Flask Debug-Modus
+      - PYTHONUNBUFFERED=1  # Python Output wird nicht gepuffert
