@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>DropCrypt Logo</title>
+    
+    <!-- Background Circle -->
+    <circle cx="12" cy="12" r="12" fill="#ffffff"/>
+    
+    <!-- Lock and Drop -->
+    <g fill="none" stroke="#2563eb" stroke-width="2">
+        <!-- Lock Body -->
+        <rect x="6" y="13" width="12" height="8" rx="2"/>
+        <!-- Lock Shackle -->
+        <path d="M8 13L8 10C8 7.8 9.8 6 12 6C14.2 6 16 7.8 16 10L16 13"/>
+        <!-- Lock Keyhole -->
+        <line x1="12" y1="15" x2="12" y2="17"/>
+        <!-- Drop -->
+        <path d="M12 3L11 5L10 7C9.5 8 9 9 9 10C9 11.7 10.3 13 12 13C13.7 13 15 11.7 15 10C15 9 14.5 8 14 7L13 5L12 3"/>
+    </g>
+</svg> 

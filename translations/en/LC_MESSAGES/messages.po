@@ -51,11 +51,11 @@ msgid "Go to homepage"
 msgstr ""
 
 #: templates/about.html:3
-msgid "About dropcrypt"
+msgid "About DropCrypt"
 msgstr ""
 
 #: templates/about.html:4
-msgid "dropcrypt allows you to send secure, encrypted one-time messages."
+msgid "DropCrypt allows you to send secure, encrypted one-time messages."
 msgstr ""
 
 #: templates/about.html:5
@@ -79,7 +79,7 @@ msgid "GitHub"
 msgstr ""
 
 #: templates/donate.html:3
-msgid "Support dropcrypt"
+msgid "Support DropCrypt"
 msgstr ""
 
 #: templates/donate.html:4
@@ -119,7 +119,7 @@ msgid "Your secure link:"
 msgstr ""
 
 #: templates/layout.html:5 templates/layout.html:11
-msgid "dropcrypt"
+msgid "DropCrypt"
 msgstr ""
 
 #: templates/layout.html:12
@@ -140,7 +140,7 @@ msgstr ""
 
 #: templates/privacy.html:4
 msgid ""
-"We respect your privacy. dropcrypt stores no metadata and deletes all "
+"We respect your privacy. DropCrypt stores no metadata and deletes all "
 "messages automatically."
 msgstr ""
 
