@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="{{ get_locale() }}">
+<head>
+    <meta charset="UTF-8">
+    <title>dropcrypt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-left">
+      <a href="{{ url_for('index') }}" class="logo">dropcrypt</a>
+      <a href="{{ url_for('about') }}">{{ _('About') }}</a>
+      <a href="{{ url_for('contact') }}">{{ _('Contact') }}</a>
+      <a href="{{ url_for('privacy') }}">{{ _('Privacy') }}</a>
+    </div>
+    <div class="nav-right">
+      <a href="{{ url_for('donate') }}" class="btn-donate">{{ _('Donate') }}</a>
+      <form method="post" action="{{ request.path }}">
+        <select name="lang" class="lang-select" onchange="this.form.submit()">
+          <option value="de" {% if get_locale() == 'de' %}selected{% endif %}>DE</option>
+          <option value="en" {% if get_locale() == 'en' %}selected{% endif %}>EN</option>
+        </select>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<main class="content">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

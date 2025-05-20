@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ _('Decrypted Message') }}</h1>
+
+{% if content %}
+    <div class="result-box">
+        <p>{{ _('The message was successfully decrypted.') }}</p>
+        <textarea readonly rows="8" onclick="this.select()">{{ content }}</textarea>
+    </div>
+{% elif error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+
+<a href="{{ url_for('index') }}" class="btn-primary">{{ _('Create New Drop') }}</a>
+{% endblock %}

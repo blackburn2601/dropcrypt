@@ -1,0 +1,57 @@
+# Bytecode-Dateien
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtuelle Umgebung
+.venv/
+env/
+venv/
+
+# Systemdateien
+.DS_Store
+Thumbs.db
+
+# Umgebungsdateien
+.env
+*.env
+
+# Editor-Dateien
+.vscode/
+.idea/
+*.swp
+
+# SQLite-Datenbank (optional, wenn lokal generiert)
+*.db
+*.sqlite3
+
+# Babel-Übersetzungsartefakte
+*.mo
+messages.pot
+
+# Docker
+*.pid
+*.log
+data/
+*.tar
+
+# pytest / unittest
+.coverage
+htmlcov/
+.tox/
+.nox/
+.cache/
+.pytest_cache/
+.junit/
+
+# Flask-Sessions / Tempfiles
+instance/
+tmp/
+
+# GitHub CLI / Auth-Dateien (nur falls versehentlich gespeichert)
+.github/
+
+# Backup-Dateien
+*~
+*.bak
+*.tmp

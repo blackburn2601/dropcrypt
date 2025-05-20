@@ -1,0 +1,11 @@
+services:
+  dropcrypt:
+    build: .
+    container_name: dropcrypt
+    ports:
+      - "8080:5000"
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
+    restart: unless-stopped

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>404 – {{ _('Page not found') }}</h1>
+<p>{{ _('The page you requested could not be found.') }}</p>
+<a href="{{ url_for('index') }}" class="btn-primary">{{ _('Back to Home') }}</a>
+{% endblock %}

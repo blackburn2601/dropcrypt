@@ -1,0 +1,170 @@
+# German translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-05-20 09:40+0000\n"
+"PO-Revision-Date: 2025-05-20 09:40+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: app.py:55
+msgid "Please enter a message."
+msgstr "Bitte geben Sie eine Nachricht ein."
+
+#: app.py:86
+msgid "This message is no longer available."
+msgstr "Diese Nachricht ist nicht länger verfügbar."
+
+#: app.py:90
+msgid "This message has expired or was already accessed."
+msgstr "Diese Nachricht ist leider abgelaufen oder wurde bereits gelesen."
+
+#: app.py:93
+msgid "Invalid token."
+msgstr "Ungültiger Token"
+
+#: app.py:98
+msgid "Decryption failed."
+msgstr "Entschlüsselung fehlgeschlagen."
+
+#: templates/404.html:3
+msgid "Page not found"
+msgstr "Seite nicht gefunden"
+
+#: templates/404.html:4
+msgid "The page you are looking for does not exist."
+msgstr "Die Seite die Sie suchen existiert leider nicht."
+
+#: templates/404.html:5
+msgid "Go to homepage"
+msgstr "Zur Startseite"
+
+#: templates/about.html:3
+msgid "About dropcrypt"
+msgstr "Über dropcrypt"
+
+#: templates/about.html:4
+msgid "dropcrypt allows you to send secure, encrypted one-time messages."
+msgstr "Dropcrypt erlaubt es Ihnen sicher und verschlüsselte Einmal-Nachrichten zu senden."
+
+#: templates/about.html:5
+msgid "No accounts, no tracking, no nonsense."
+msgstr "Keine Konto notwendig, keine Verfolgung, kein Blödsinn."
+
+#: templates/contact.html:3 templates/layout.html:13
+msgid "Contact"
+msgstr "Kontakt"
+
+#: templates/contact.html:4
+msgid "For feedback or questions, contact us at:"
+msgstr "Für Feedback oder Fragen, schreib uns an:"
+
+#: templates/contact.html:7
+msgid "Email"
+msgstr "E-Mail"
+
+#: templates/contact.html:8
+msgid "GitHub"
+msgstr ""
+
+#: templates/donate.html:3
+msgid "Support dropcrypt"
+msgstr "Unterstütze dropcrypt"
+
+#: templates/donate.html:4
+msgid "If you appreciate this service, consider supporting the project:"
+msgstr ""
+
+#: templates/donate.html:7
+msgid "PayPal"
+msgstr ""
+
+#: templates/donate.html:8
+msgid "Bitcoin"
+msgstr ""
+
+#: templates/donate.html:9
+msgid "Monero"
+msgstr ""
+
+#: templates/donate.html:12
+msgid "Thank you for your support!"
+msgstr ""
+
+#: templates/index.html:3
+msgid "Create a secure drop"
+msgstr ""
+
+#: templates/index.html:6
+msgid "Enter your sensitive information here..."
+msgstr ""
+
+#: templates/index.html:7
+msgid "Create Link"
+msgstr ""
+
+#: templates/index.html:11
+msgid "Your secure link:"
+msgstr ""
+
+#: templates/layout.html:5 templates/layout.html:11
+msgid "dropcrypt"
+msgstr ""
+
+#: templates/layout.html:12
+msgid "About"
+msgstr ""
+
+#: templates/layout.html:14
+msgid "Privacy"
+msgstr ""
+
+#: templates/layout.html:17
+msgid "Donate"
+msgstr ""
+
+#: templates/privacy.html:3
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/privacy.html:4
+msgid ""
+"We respect your privacy. dropcrypt stores no metadata and deletes all "
+"messages automatically."
+msgstr ""
+
+#: templates/privacy.html:6
+msgid "End-to-end encryption by default."
+msgstr ""
+
+#: templates/privacy.html:7
+msgid "Self-destruction after access or timeout."
+msgstr ""
+
+#: templates/privacy.html:8
+msgid "No logs, no IPs, no tracking."
+msgstr ""
+
+#: templates/view.html:3
+msgid "Encrypted Message"
+msgstr ""
+
+#: templates/view.html:6
+msgid "The message was successfully decrypted:"
+msgstr ""
+
+#: templates/view.html:10
+msgid "This message has now been deleted."
+msgstr ""
+

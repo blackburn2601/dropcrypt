@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ _('Create a secure drop') }}</h1>
+<form method="POST">
+    <textarea name="content" placeholder="{{ _('Enter your secret message here...') }}" rows="6" required></textarea>
+    <br>
+    <button type="submit" class="btn-primary">{{ _('Generate secure link') }}</button>
+</form>
+{% if link %}
+    <div class="result-box">
+        <p>{{ _('Share this link securely:') }}</p>
+        <input type="text" readonly value="{{ link }}" onclick="this.select()">
+    </div>
+{% elif error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+{% endblock %}
