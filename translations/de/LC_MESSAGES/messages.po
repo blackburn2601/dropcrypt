@@ -51,12 +51,12 @@ msgid "Go to homepage"
 msgstr "Zur Startseite"
 
 #: templates/about.html:3
-msgid "About dropcrypt"
-msgstr "Über dropcrypt"
+msgid "About DropCrypt"
+msgstr "Über DropCrypt"
 
 #: templates/about.html:4
-msgid "dropcrypt allows you to send secure, encrypted one-time messages."
-msgstr "Dropcrypt erlaubt es Ihnen sicher und verschlüsselte Einmal-Nachrichten zu senden."
+msgid "DropCrypt allows you to send secure, encrypted one-time messages."
+msgstr "DropCrypt ermöglicht es dir, sichere, verschlüsselte Einmal-Nachrichten zu versenden."
 
 #: templates/about.html:5
 msgid "No accounts, no tracking, no nonsense."
@@ -79,12 +79,12 @@ msgid "GitHub"
 msgstr ""
 
 #: templates/donate.html:3
-msgid "Support dropcrypt"
-msgstr "Unterstütze dropcrypt"
+msgid "Support DropCrypt"
+msgstr "Unterstütze DropCrypt"
 
 #: templates/donate.html:4
 msgid "If you appreciate this service, consider supporting the project:"
-msgstr ""
+msgstr "Wenn dir dieser Service gefällt, unterstütze das Projekt:"
 
 #: templates/donate.html:7
 msgid "PayPal"
@@ -100,71 +100,100 @@ msgstr ""
 
 #: templates/donate.html:12
 msgid "Thank you for your support!"
-msgstr ""
+msgstr "Vielen Dank für deine Unterstützung!"
 
 #: templates/index.html:3
 msgid "Create a secure drop"
-msgstr ""
+msgstr "Sichere Nachricht erstellen"
 
 #: templates/index.html:6
 msgid "Enter your sensitive information here..."
-msgstr ""
+msgstr "Gib hier deine vertrauliche Nachricht ein..."
 
 #: templates/index.html:7
 msgid "Create Link"
-msgstr ""
+msgstr "Link erstellen"
 
 #: templates/index.html:11
 msgid "Your secure link:"
-msgstr ""
+msgstr "Dein sicherer Link:"
 
 #: templates/layout.html:5 templates/layout.html:11
-msgid "dropcrypt"
-msgstr ""
+msgid "DropCrypt"
+msgstr "DropCrypt"
 
 #: templates/layout.html:12
 msgid "About"
-msgstr ""
+msgstr "Über"
 
 #: templates/layout.html:14
 msgid "Privacy"
-msgstr ""
+msgstr "Datenschutz"
 
 #: templates/layout.html:17
 msgid "Donate"
-msgstr ""
+msgstr "Spenden"
 
 #: templates/privacy.html:3
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Datenschutzerklärung"
 
 #: templates/privacy.html:4
-msgid ""
-"We respect your privacy. dropcrypt stores no metadata and deletes all "
-"messages automatically."
-msgstr ""
+msgid "We respect your privacy. DropCrypt stores no metadata and deletes all messages automatically."
+msgstr "Wir respektieren deine Privatsphäre. DropCrypt speichert keine Metadaten und löscht alle Nachrichten automatisch."
 
 #: templates/privacy.html:6
 msgid "End-to-end encryption by default."
-msgstr ""
+msgstr "Standardmäßig Ende-zu-Ende-Verschlüsselung."
 
 #: templates/privacy.html:7
 msgid "Self-destruction after access or timeout."
-msgstr ""
+msgstr "Selbstzerstörung nach Zugriff oder Zeitablauf."
 
 #: templates/privacy.html:8
 msgid "No logs, no IPs, no tracking."
-msgstr ""
+msgstr "Keine Logs, keine IPs, kein Tracking."
 
 #: templates/view.html:3
 msgid "Encrypted Message"
-msgstr ""
+msgstr "Verschlüsselte Nachricht"
 
 #: templates/view.html:6
 msgid "The message was successfully decrypted:"
-msgstr ""
+msgstr "Die Nachricht wurde erfolgreich entschlüsselt:"
 
 #: templates/view.html:10
 msgid "This message has now been deleted."
-msgstr ""
+msgstr "Diese Nachricht wurde jetzt gelöscht."
+
+# Neue Übersetzungen für die UI-Updates
+msgid "Toggle theme"
+msgstr "Design umschalten"
+
+msgid "Toggle dark mode"
+msgstr "Dunkelmodus umschalten"
+
+msgid "Copy link"
+msgstr "Link kopieren"
+
+msgid "Link copied!"
+msgstr "Link kopiert!"
+
+msgid "Share this link securely:"
+msgstr "Teile diesen Link sicher:"
+
+msgid "This link can only be accessed once and expires in 60 minutes."
+msgstr "Dieser Link kann nur einmal aufgerufen werden und läuft in 60 Minuten ab."
+
+msgid "Generate secure link"
+msgstr "Sicheren Link generieren"
+
+msgid "Enter your secret message here..."
+msgstr "Gib hier deine geheime Nachricht ein..."
+
+msgid "Secure One-Time Message Sharing"
+msgstr "Sichere Einmal-Nachrichtenübermittlung"
+
+msgid "Share encrypted messages that can only be viewed once"
+msgstr "Teile verschlüsselte Nachrichten, die nur einmal angesehen werden können"
 

@@ -4,7 +4,7 @@ import secrets
 
 from waitress import serve
 from datetime import datetime, timedelta
-from flask import Flask, render_template, request, abort, make_response
+from flask import Flask, render_template, request, abort, make_response, redirect, url_for
 from flask_babel import Babel, gettext as _
 from encryption import encrypt_data, decrypt_data, hash_token
 from config import DB_PATH, TTL_MINUTES, SECRET_KEY
@@ -125,6 +125,20 @@ def donate():
 @app.errorhandler(404)
 def not_found(e):
     return render_template("404.html"), 404
+
+@app.route('/switch_language', methods=['GET', 'POST'])
+def switch_language():
+    if request.method == 'GET':
+        lang = request.args.get('lang', 'de')
+    else:
+        lang = request.form.get('lang', 'de')
+    
+    if lang not in ['de', 'en']:
+        lang = 'de'
+        
+    response = make_response(redirect(request.referrer or url_for('index')))
+    response.set_cookie('lang', lang, max_age=365*24*3600)  # Cookie valid for 1 year
+    return response
 
 if __name__ == "__main__":
     serve(app, host="0.0.0.0", port=5000)
