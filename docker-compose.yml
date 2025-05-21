@@ -14,8 +14,6 @@ services:
       - ./config.py:/app/config.py
       - ./encryption.py:/app/encryption.py
       - ./database.py:/app/database.py
-    env_file:
-      - .env
     restart: unless-stopped
     environment:
       - FLASK_DEBUG=1  # Aktiviert Flask Debug-Modus
