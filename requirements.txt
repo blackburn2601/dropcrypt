@@ -3,3 +3,4 @@ Flask-Babel>=4.0.0
 cryptography
 python-dotenv
 waitress
+psycopg2-binary==2.9.9
