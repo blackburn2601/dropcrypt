@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DropCrypt - {{ _('Secure One-Time Message Sharing') }}</title>
+    <script>
+        // Immediately set theme before any content renders
+        try {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+    </script>
+    <title>dropcrypt - {{ _('Secure One-Time Message Sharing') }}</title>
     <meta name="description" content="{{ _('Share encrypted messages that can only be viewed once') }}">
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/logo-export.svg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -17,7 +24,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         <path class="logo-drop" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2.25S9 6 9 8.25a3 3 0 106 0C15 6 12 2.25 12 2.25z" />
                     </svg>
-                    <span>DropCrypt</span>
+                    <span>dropcrypt</span>
                 </a>
                 <a href="{{ url_for('about') }}">
                     <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -67,16 +74,18 @@
         {% block content %}{% endblock %}
     </main>
 
-    <script>
-        // Apply theme immediately before page renders
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-        }
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="{{ url_for('impressum') }}">{{ _('Legal Notice') }}</a>
+                <a href="{{ url_for('datenschutz') }}">{{ _('Privacy Policy') }}</a>
+                <a href="{{ url_for('nutzungsbedingungen') }}">{{ _('Terms of Service') }}</a>
+                <a href="{{ url_for('spendenhinweis') }}">{{ _('Donation Notice') }}</a>
+            </div>
+        </div>
+    </footer>
 
+    <script>
         // Theme toggle functionality
         const themeToggle = document.querySelector('.theme-toggle');
         const html = document.documentElement;

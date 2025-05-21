@@ -1,13 +1,13 @@
 import os
-import sqlite3
 import secrets
+from datetime import datetime, timedelta
 
 from waitress import serve
-from datetime import datetime, timedelta
 from flask import Flask, render_template, request, abort, make_response, redirect, url_for
 from flask_babel import Babel, gettext as _
 from encryption import encrypt_data, decrypt_data, hash_token
-from config import DB_PATH, TTL_MINUTES, SECRET_KEY
+from database import init_db, get_db
+from config import SECRET_KEY, TTL_MINUTES
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -30,24 +30,7 @@ babel.init_app(app, locale_selector=get_locale)
 def inject_locale():
     return dict(get_locale=get_locale)
 
-# Initialize SQLite database if it does not exist
-def init_db():
-    if not os.path.exists(DB_PATH):
-        with sqlite3.connect(DB_PATH) as conn:
-            conn.execute('''
-                CREATE TABLE IF NOT EXISTS transactions (
-                    id TEXT PRIMARY KEY,
-                    token_hash TEXT NOT NULL,
-                    content_enc TEXT NOT NULL,
-                    created_at TEXT NOT NULL,
-                    expires_at TEXT NOT NULL,
-                    accessed INTEGER DEFAULT 0
-                );
-            ''')
-
-def get_db():
-    return sqlite3.connect(DB_PATH)
-
+# Initialize database
 init_db()
 
 # Home page with message creation
@@ -66,11 +49,12 @@ def index():
         created = datetime.utcnow()
         expires = created + timedelta(minutes=TTL_MINUTES)
 
-        with get_db() as db:
-            db.execute('''
-                INSERT INTO transactions (id, token_hash, content_enc, created_at, expires_at)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (uid, token_hashed, enc, created.isoformat(), expires.isoformat()))
+        with get_db() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO transactions (id, token_hash, content_enc, created_at, expires_at)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, (uid, token_hashed, enc, created, expires))
 
         link = f"{request.url_root}view/{uid}?token={token}"
         return render_template('index.html', link=link)
@@ -84,25 +68,32 @@ def view(id):
     if not token:
         abort(403)
 
-    with get_db() as db:
-        row = db.execute('SELECT token_hash, content_enc, accessed, expires_at FROM transactions WHERE id = ?', (id,)).fetchone()
-        if not row:
-            return render_template('view.html', error=_("This message is no longer available."))
+    with get_db() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT token_hash, content_enc, accessed, expires_at 
+                FROM transactions 
+                WHERE id = %s
+            """, (id,))
+            row = cur.fetchone()
+            
+            if not row:
+                return render_template('view.html', error=_("This message is no longer available."))
 
-        token_hash, enc, accessed, expires_at = row
-        if accessed or datetime.fromisoformat(expires_at) < datetime.utcnow():
-            return render_template('view.html', error=_("This message has expired or was already accessed."))
+            token_hash, enc, accessed, expires_at = row
+            if accessed or expires_at < datetime.utcnow():
+                return render_template('view.html', error=_("This message has expired or was already accessed."))
 
-        if hash_token(token) != token_hash:
-            return render_template('view.html', error=_("Invalid token."))
+            if hash_token(token) != token_hash:
+                return render_template('view.html', error=_("Invalid token."))
 
-        try:
-            decrypted = decrypt_data(enc, token)
-        except:
-            return render_template('view.html', error=_("Decryption failed."))
+            try:
+                decrypted = decrypt_data(enc, token)
+            except:
+                return render_template('view.html', error=_("Decryption failed."))
 
-        db.execute('DELETE FROM transactions WHERE id = ?', (id,))
-        return render_template('view.html', content=decrypted)
+            cur.execute('DELETE FROM transactions WHERE id = %s', (id,))
+            return render_template('view.html', content=decrypted)
 
 # Static pages
 @app.route('/about')
@@ -120,6 +111,22 @@ def privacy():
 @app.route('/donate')
 def donate():
     return render_template('donate.html')
+
+@app.route('/impressum')
+def impressum():
+    return render_template('impressum.html')
+
+@app.route('/datenschutz')
+def datenschutz():
+    return render_template('datenschutz.html')
+
+@app.route('/nutzungsbedingungen')
+def nutzungsbedingungen():
+    return render_template('nutzungsbedingungen.html')
+
+@app.route('/spendenhinweis')
+def spendenhinweis():
+    return render_template('spendenhinweis.html')
 
 # Error handling
 @app.errorhandler(404)

@@ -13,9 +13,56 @@ services:
       - ./app.py:/app/app.py
       - ./config.py:/app/config.py
       - ./encryption.py:/app/encryption.py
+      - ./database.py:/app/database.py
     env_file:
       - .env
     restart: unless-stopped
     environment:
       - FLASK_DEBUG=1  # Aktiviert Flask Debug-Modus
       - PYTHONUNBUFFERED=1  # Python Output wird nicht gepuffert
+      - POSTGRES_HOST=db
+    depends_on:
+      - db
+
+  cleanup:
+    build:
+      context: .
+      dockerfile: Dockerfile.cleanup
+    container_name: dropcrypt-cleanup
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+      - POSTGRES_HOST=db
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    container_name: dropcrypt-db
+    environment:
+      POSTGRES_DB: dropcrypt
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer:latest
+    container_name: dropcrypt-adminer
+    ports:
+      - "8081:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
