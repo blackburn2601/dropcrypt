@@ -1,11 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="loader-overlay active" id="loader">
+    <div class="encryption-loader">
+        <div class="loader-message">
+            <svg class="animate-pulse" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+            </svg>
+            <span>{{ _('Decrypting message...') }}</span>
+        </div>
+        <div class="encryption-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+</div>
+
 <h1>{{ _('Decrypted Message') }}</h1>
 
 {% if content %}
-    <div class="result-box">
+    <div class="result-box" id="messageBox" style="opacity: 0; transition: opacity 0.3s;">
         <p>{{ _('The message was successfully decrypted.') }}</p>
-        <textarea readonly rows="8" onclick="this.select()">{{ content }}</textarea>
+        <textarea readonly rows="8" onclick="this.select()" id="messageContent"></textarea>
     </div>
 {% elif error %}
     <p class="error">{{ error }}</p>
@@ -14,4 +30,30 @@
 <div class="action-buttons">
     <a href="{{ url_for('index') }}" class="btn-primary">{{ _('Create New Drop') }}</a>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messageBox = document.getElementById('messageBox');
+    const messageContent = document.getElementById('messageContent');
+    const loader = document.getElementById('loader');
+    
+    {% if content %}
+    const decryptedMessage = {{ content|tojson|safe }};
+    {% endif %}
+
+    setTimeout(() => {
+        if (loader) {
+            loader.style.opacity = '0';
+            
+            setTimeout(() => {
+                loader.style.display = 'none';
+                if (messageBox && messageContent && typeof decryptedMessage !== 'undefined') {
+                    messageContent.value = decryptedMessage;
+                    messageBox.style.opacity = '1';
+                }
+            }, 300);
+        }
+    }, 700);
+});
+</script>
 {% endblock %}
