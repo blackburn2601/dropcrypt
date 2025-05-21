@@ -2,6 +2,18 @@
 {% block content %}
 <div class="form-container">
     <h1>{{ _('Create a secure drop') }}</h1>
+    
+    <div class="instructions">
+        <h2>{{ _('How it works:') }}</h2>
+        <ol>
+            <li>{{ _('Enter your confidential message in the text field below') }}</li>
+            <li>{{ _('Click "Generate secure link" to create an encrypted one-time link') }}</li>
+            <li>{{ _('Share the generated link with your recipient') }}</li>
+            <li>{{ _('The recipient can view the message exactly once before it is permanently deleted') }}</li>
+            <li>{{ _('The link automatically expires after 60 minutes for security') }}</li>
+        </ol>
+    </div>
+
     <form method="POST">
         <textarea 
             name="content" 

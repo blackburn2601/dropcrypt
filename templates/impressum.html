@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="legal-content">
+    <h1>{{ _('Legal Notice') }}</h1>
+    
+    <div class="highlight-box">
+        <h2>{{ _('Information according to § 5 TMG') }}</h2>
+        <div class="contact-info">
+            <p><strong>Sebastian Wagner</strong><br>
+            Musterstraße 12<br>
+            12345 Musterstadt<br>
+            {{ _('Germany') }}</p>
+            
+            <p><strong>{{ _('Contact') }}</strong><br>
+            {{ _('E-Mail') }}: <a href="mailto:support@dropcrypt.org">support@dropcrypt.org</a></p>
+        </div>
+    </div>
+
+    <h2>{{ _('Responsible for content according to § 55 Abs. 2 RStV') }}</h2>
+    <div class="contact-info">
+        <p><strong>Sebastian Wagner</strong><br>
+        Musterstraße 12<br>
+        12345 Musterstadt</p>
+    </div>
+</div>
+{% endblock %}

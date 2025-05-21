@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="legal-content">
+    <h1>{{ _('Privacy Policy') }}</h1>
+
+    <div class="highlight-box">
+        <h2>1. {{ _('Responsible Party') }}</h2>
+        <div class="contact-info">
+            <p><strong>Sebastian Wagner</strong><br>
+            Musterstraße 12<br>
+            12345 Musterstadt<br>
+            {{ _('E-Mail') }}: <a href="mailto:support@dropcrypt.org">support@dropcrypt.org</a></p>
+        </div>
+    </div>
+
+    <h2>2. {{ _('Collection and Storage of Personal Data') }}</h2>
+    <p>{{ _('When visiting this website, the following data is automatically collected') }}:</p>
+    <ul>
+        <li>{{ _('IP address of the device') }}</li>
+        <li>{{ _('Date and time of request') }}</li>
+        <li>{{ _('Accessed pages / files') }}</li>
+        <li>{{ _('HTTP status code') }}</li>
+        <li>{{ _('Browser type and version') }}</li>
+    </ul>
+    <p class="highlight-box">{{ _('This data is technically necessary to deliver the website correctly and is stored in server logs for a maximum of 7 days. No association with specific individuals is made.') }}</p>
+
+    <h2>3. {{ _('Use of the "dropcrypt" Service') }}</h2>
+    <p>{{ _('When using the service, the following information may be stored') }}:</p>
+    <ul>
+        <li>{{ _('Content of the transmitted message (encrypted)') }}</li>
+        <li>{{ _('Time of creation') }}</li>
+        <li>{{ _('Technical one-time link (with hash ID and token)') }}</li>
+        <li>{{ _('Time of access (for automatic deletion)') }}</li>
+    </ul>
+    <p class="highlight-box">{{ _('No personal data is collected or stored that would allow identification of users.') }}</p>
+
+    <h2>4. {{ _('Cookies') }}</h2>
+    <div class="highlight-box">
+        <p>{{ _('This website only uses one cookie to store the user\'s language preference. No other cookies or tracking mechanisms are used.') }}</p>
+    </div>
+
+    <h2>5. {{ _('Your Rights') }}</h2>
+    <p>{{ _('You have the right to') }}:</p>
+    <ul>
+        <li>{{ _('Information about your stored data') }}</li>
+        <li>{{ _('Correction or deletion') }}</li>
+        <li>{{ _('Restriction of processing') }}</li>
+        <li>{{ _('Object to processing') }}</li>
+    </ul>
+    <p class="highlight-box">{{ _('Please contact support@dropcrypt.org for this purpose') }}</p>
+
+    <h2>6. {{ _('Right to Complain to the Supervisory Authority') }}</h2>
+    <div class="highlight-box">
+        <p>{{ _('You have the right to complain to a data protection supervisory authority if you believe that the processing of your personal data violates applicable data protection law.') }}</p>
+    </div>
+</div>
+{% endblock %}

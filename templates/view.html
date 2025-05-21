@@ -11,5 +11,7 @@
     <p class="error">{{ error }}</p>
 {% endif %}
 
-<a href="{{ url_for('index') }}" class="btn-primary">{{ _('Create New Drop') }}</a>
+<div class="action-buttons">
+    <a href="{{ url_for('index') }}" class="btn-primary">{{ _('Create New Drop') }}</a>
+</div>
 {% endblock %}
