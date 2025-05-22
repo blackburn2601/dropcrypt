@@ -1,6 +1,7 @@
 import os
 import secrets
 from datetime import datetime, timedelta
+import calendar
 
 from waitress import serve
 from flask import Flask, render_template, request, abort, make_response, redirect, url_for
@@ -71,7 +72,7 @@ def view(id):
     with get_db() as conn:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT token_hash, content_enc, accessed, expires_at 
+                SELECT token_hash, content_enc, accessed, expires_at, created_at 
                 FROM transactions 
                 WHERE id = %s
             """, (id,))
@@ -80,8 +81,18 @@ def view(id):
             if not row:
                 return render_template('view.html', error=_("This message is no longer available."))
 
-            token_hash, enc, accessed, expires_at = row
-            if accessed or expires_at < datetime.utcnow():
+            token_hash, enc, accessed, expires_at, created_at = row
+            now = datetime.utcnow()
+            
+            # Check if expired or already accessed
+            if accessed or expires_at < now:
+                completion_type = 'expired' if expires_at < now else 'accessed'
+                # Log to history before deleting
+                cur.execute("""
+                    INSERT INTO transactions_history (id, created_at, completed_at, completion_type)
+                    VALUES (%s, %s, %s, %s)
+                """, (id, created_at, now, completion_type))
+                cur.execute('DELETE FROM transactions WHERE id = %s', (id,))
                 return render_template('view.html', error=_("This message has expired or was already accessed."))
 
             if hash_token(token) != token_hash:
@@ -92,6 +103,11 @@ def view(id):
             except:
                 return render_template('view.html', error=_("Decryption failed."))
 
+            # Log successful access to history before deleting
+            cur.execute("""
+                INSERT INTO transactions_history (id, created_at, completed_at, completion_type)
+                VALUES (%s, %s, %s, %s)
+            """, (id, created_at, now, 'read'))
             cur.execute('DELETE FROM transactions WHERE id = %s', (id,))
             return render_template('view.html', content=decrypted)
 
@@ -112,21 +128,64 @@ def privacy():
 def donate():
     return render_template('donate.html')
 
-@app.route('/impressum')
-def impressum():
-    return render_template('impressum.html')
+@app.route('/legalnotice')
+def legalnotice():
+    return render_template('legal_notice.html')
 
-@app.route('/datenschutz')
-def datenschutz():
-    return render_template('datenschutz.html')
+@app.route('/privacypolicy')
+def privacypolicy():
+    return render_template('privacy_policy.html')
 
-@app.route('/nutzungsbedingungen')
-def nutzungsbedingungen():
-    return render_template('nutzungsbedingungen.html')
+@app.route('/termsofservice')
+def termsofservice():
+    return render_template('terms_of_service.html')
 
-@app.route('/spendenhinweis')
-def spendenhinweis():
-    return render_template('spendenhinweis.html')
+@app.route('/donationnotice')
+def donationnotice():
+    return render_template('donation_notice.html')
+
+@app.route('/statistics')
+def statistics():
+    with get_db() as conn:
+        with conn.cursor() as cur:
+            # Total transactions ever (from history)
+            cur.execute("""
+                SELECT COUNT(*) FROM transactions_history
+            """)
+            total_transactions = cur.fetchone()[0]
+
+            # Currently open transactions
+            cur.execute("""
+                SELECT COUNT(*) FROM transactions 
+                WHERE expires_at > NOW() AND accessed = false
+            """)
+            open_transactions = cur.fetchone()[0]
+
+            # Transactions this month (from both current and history)
+            first_day = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            last_day = (first_day.replace(day=calendar.monthrange(first_day.year, first_day.month)[1])
+                       .replace(hour=23, minute=59, second=59))
+            
+            # Count from history
+            cur.execute("""
+                SELECT COUNT(*) FROM transactions_history 
+                WHERE created_at BETWEEN %s AND %s
+            """, (first_day, last_day))
+            monthly_history = cur.fetchone()[0]
+
+            # Count from current transactions
+            cur.execute("""
+                SELECT COUNT(*) FROM transactions 
+                WHERE created_at BETWEEN %s AND %s
+            """, (first_day, last_day))
+            monthly_current = cur.fetchone()[0]
+
+            monthly_transactions = monthly_history + monthly_current
+
+    return render_template('statistics.html', 
+                         total_transactions=total_transactions,
+                         open_transactions=open_transactions,
+                         monthly_transactions=monthly_transactions)
 
 # Error handling
 @app.errorhandler(404)

@@ -197,3 +197,183 @@ msgstr "Sichere Einmal-Nachrichtenübermittlung"
 msgid "Share encrypted messages that can only be viewed once"
 msgstr "Teile verschlüsselte Nachrichten, die nur einmal angesehen werden können"
 
+# Navigation
+msgid "About"
+msgstr "Über uns"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Privacy"
+msgstr "Datenschutz"
+
+msgid "Donate"
+msgstr "Spenden"
+
+# Main content
+msgid "Secure One-Time Message Sharing"
+msgstr "Sichere Einmal-Nachrichtenübermittlung"
+
+msgid "Share encrypted messages that can only be viewed once"
+msgstr "Teile verschlüsselte Nachrichten, die nur einmal gelesen werden können"
+
+# Footer
+msgid "Legal Notice"
+msgstr "Impressum"
+
+msgid "Privacy Policy"
+msgstr "Datenschutzerklärung"
+
+msgid "Terms of Service"
+msgstr "Nutzungsbedingungen"
+
+msgid "Donation Notice"
+msgstr "Spendenhinweis"
+
+# Steps Animation
+msgid "Enter Message"
+msgstr "Nachricht eingeben"
+
+msgid "Generate Link"
+msgstr "Link generieren"
+
+msgid "Share Link"
+msgstr "Link teilen"
+
+msgid "Auto-delete"
+msgstr "Automatisch löschen"
+
+# Encryption Process
+msgid "Encrypting message..."
+msgstr "Nachricht wird verschlüsselt..."
+
+msgid "Decrypting message..."
+msgstr "Nachricht wird entschlüsselt..."
+
+# Copy functionality
+msgid "Copy to clipboard"
+msgstr "In die Zwischenablage kopieren"
+
+msgid "Copied!"
+msgstr "Kopiert!"
+
+# Error messages
+msgid "404 - Page not found"
+msgstr "404 - Seite nicht gefunden"
+
+msgid "The page you are looking for does not exist."
+msgstr "Die gesuchte Seite existiert nicht."
+
+# Navigation and Basic UI
+msgid "About"
+msgstr "Über uns"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Privacy"
+msgstr "Datenschutz"
+
+msgid "Donate"
+msgstr "Spenden"
+
+msgid "Toggle theme"
+msgstr "Design umschalten"
+
+msgid "Toggle dark mode"
+msgstr "Dunkelmodus umschalten"
+
+# Main Content
+msgid "Create a secure drop"
+msgstr "Sichere Nachricht erstellen"
+
+msgid "Write message"
+msgstr "Nachricht schreiben"
+
+msgid "Get secure link"
+msgstr "Sicheren Link erhalten"
+
+msgid "Share link"
+msgstr "Link teilen"
+
+msgid "Auto-delete"
+msgstr "Automatisch löschen"
+
+msgid "Encrypting your message..."
+msgstr "Deine Nachricht wird verschlüsselt..."
+
+msgid "Enter your secret message here..."
+msgstr "Gib hier deine geheime Nachricht ein..."
+
+msgid "Generate Secure Link"
+msgstr "Sicheren Link generieren"
+
+msgid "Share this link securely:"
+msgstr "Teile diesen Link sicher:"
+
+msgid "Copy link"
+msgstr "Link kopieren"
+
+msgid "Link copied!"
+msgstr "Link kopiert!"
+
+msgid "This link can only be accessed once and expires in 60 minutes."
+msgstr "Dieser Link kann nur einmal aufgerufen werden und läuft in 60 Minuten ab."
+
+# How does it work section
+msgid "How does it work in detail?"
+msgstr "Wie funktioniert es im Detail?"
+
+msgid "1. Message Encryption"
+msgstr "1. Nachrichtenverschlüsselung"
+
+msgid "Your message is encrypted using AES-GCM with a unique key derived from a random token. This token is part of the generated link and is never stored on our servers - only used to create the encryption key."
+msgstr "Deine Nachricht wird mit AES-GCM und einem einzigartigen Schlüssel verschlüsselt, der aus einem zufälligen Token generiert wird. Dieser Token ist Teil des generierten Links und wird nie auf unseren Servern gespeichert - er wird nur zur Erstellung des Verschlüsselungsschlüssels verwendet."
+
+msgid "2. Secure Storage"
+msgstr "2. Sichere Speicherung"
+
+msgid "We only store two things: Your encrypted message and a hash of the access token (not the token itself). This means even we cannot decrypt your message without the complete link."
+msgstr "Wir speichern nur zwei Dinge: Deine verschlüsselte Nachricht und einen Hash des Zugriffstokens (nicht den Token selbst). Das bedeutet, dass selbst wir deine Nachricht ohne den vollständigen Link nicht entschlüsseln können."
+
+msgid "3. One-Time Access"
+msgstr "3. Einmaliger Zugriff"
+
+msgid "When someone opens the link, the token in the URL is used to recreate the encryption key. After successful decryption, both the encrypted message and token hash are immediately deleted."
+msgstr "Wenn jemand den Link öffnet, wird der Token in der URL verwendet, um den Verschlüsselungsschlüssel neu zu erstellen. Nach erfolgreicher Entschlüsselung werden sowohl die verschlüsselte Nachricht als auch der Token-Hash sofort gelöscht."
+
+msgid "4. Automatic Expiration"
+msgstr "4. Automatischer Ablauf"
+
+msgid "If a message is not accessed within 60 minutes, it is automatically deleted from our servers. This ensures that no data remains stored longer than necessary."
+msgstr "Wenn eine Nachricht nicht innerhalb von 60 Minuten abgerufen wird, wird sie automatisch von unseren Servern gelöscht. Dies stellt sicher, dass keine Daten länger als nötig gespeichert bleiben."
+
+# Error Messages
+msgid "Please enter a message."
+msgstr "Bitte gib eine Nachricht ein."
+
+msgid "This message is no longer available."
+msgstr "Diese Nachricht ist nicht mehr verfügbar."
+
+msgid "This message has expired or was already accessed."
+msgstr "Diese Nachricht ist abgelaufen oder wurde bereits gelesen."
+
+msgid "Invalid token."
+msgstr "Ungültiger Token."
+
+msgid "Decryption failed."
+msgstr "Entschlüsselung fehlgeschlagen."
+
+# Footer Links
+msgid "Legal Notice"
+msgstr "Impressum"
+
+msgid "Privacy Policy"
+msgstr "Datenschutzerklärung"
+
+msgid "Terms of Service"
+msgstr "Nutzungsbedingungen"
+
+msgid "Donation Notice"
+msgstr "Spendenhinweis"
+
