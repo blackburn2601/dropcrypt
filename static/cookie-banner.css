@@ -1,0 +1,141 @@
+.cookie-banner {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background: var(--background-color);
+    background: rgba(var(--background-rgb), 0.95);
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    transition: opacity 0.4s ease-in-out;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.cookie-banner.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cookie-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.cookie-text {
+    flex: 1;
+    min-width: 280px;
+}
+
+.cookie-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.cookie-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    border: none;
+    background: var(--background-color);
+    color: var(--text-color);
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.cookie-btn:hover {
+    background: var(--hover-color);
+}
+
+.cookie-btn.accept {
+    background: var(--primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    width: auto;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.cookie-btn.accept:hover {
+    background: var(--primary-dark);
+}
+
+.cookie-settings {
+    display: none;
+    padding: 1rem;
+    margin-top: 1rem;
+    background: var(--background-secondary);
+    border-radius: 0.5rem;
+}
+
+.cookie-settings.show {
+    display: block;
+}
+
+.cookie-option {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--background-secondary);
+}
+
+.cookie-option label {
+    margin-left: 0.5rem;
+    flex: 1;
+}
+
+.required {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+    .cookie-banner {
+        width: calc(100% - 20px);
+        margin-bottom: 10px;
+        bottom: 10px;
+    }
+    
+    .cookie-buttons {
+        justify-content: stretch;
+    }
+    
+    .cookie-btn.accept, #acceptSelected {
+        width: 100%;
+    }
+}
+
+/* Add pulse animation to accept button */
+.cookie-btn.accept {
+    animation: buttonPulse 2s infinite;
+}
+
+@keyframes buttonPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+    }
+} 

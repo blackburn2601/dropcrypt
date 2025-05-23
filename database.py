@@ -33,19 +33,29 @@ def get_db():
         pool.putconn(conn)
 
 def init_db():
-    """Initialize the database schema"""
+    """Initialize the database with required tables."""
     with get_db() as conn:
         with conn.cursor() as cur:
-            # Create transactions table if it doesn't exist
+            # Create transactions table
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS transactions (
-                    id VARCHAR(32) PRIMARY KEY,
-                    token_hash VARCHAR(64) NOT NULL,
+                    id TEXT PRIMARY KEY,
+                    token_hash TEXT NOT NULL,
                     content_enc TEXT NOT NULL,
                     created_at TIMESTAMP NOT NULL,
                     expires_at TIMESTAMP NOT NULL,
                     accessed BOOLEAN DEFAULT FALSE
-                );
+                )
+            """)
+            
+            # Create transactions history table
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS transactions_history (
+                    id TEXT PRIMARY KEY,
+                    created_at TIMESTAMP NOT NULL,
+                    completed_at TIMESTAMP NOT NULL,
+                    completion_type TEXT NOT NULL
+                )
             """)
             
             # Create index on expires_at for cleanup
