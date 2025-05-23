@@ -946,3 +946,130 @@ textarea:focus {
     font-size: 0.9rem;
     margin-top: 0.5rem;
 }
+
+/* Active state styles for navigation and footer */
+.nav-left a.active {
+    color: var(--primary);
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+}
+
+.nav-left a.active .nav-icon {
+    color: var(--primary);
+}
+
+.footer-links a.active {
+    color: var(--primary);
+    opacity: 1;
+}
+
+.footer-links a.active svg {
+    color: var(--primary);
+}
+
+/* Language Dropdown */
+.lang-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.lang-dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.2s ease;
+}
+
+.lang-dropdown-btn:hover {
+    background: var(--gray-light);
+}
+
+.dropdown-arrow {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.lang-dropdown-content {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    min-width: 150px;
+    display: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.lang-dropdown-content.show {
+    display: block;
+    animation: dropdownFade 0.2s ease;
+}
+
+.lang-dropdown-btn[aria-expanded="true"] .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.lang-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.lang-option:hover {
+    background: var(--gray-light);
+}
+
+.lang-option.active {
+    color: var(--primary);
+    background: var(--gray-light);
+}
+
+.lang-option img {
+    width: 24px;
+    height: 24px;
+    border-radius: 2px;
+}
+
+.lang-option span {
+    font-size: 0.9rem;
+}
+
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 640px) {
+    .lang-dropdown-content {
+        right: 50%;
+        transform: translateX(50%);
+    }
+    
+    .lang-dropdown-content.show {
+        transform: translateX(50%);
+    }
+}

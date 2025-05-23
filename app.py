@@ -2,21 +2,58 @@ import os
 import secrets
 from datetime import datetime, timedelta
 import calendar
+import smtplib
+from email.mime.text import MIMEText
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 from waitress import serve
-from flask import Flask, render_template, request, abort, make_response, redirect, url_for
+from flask import Flask, render_template, request, abort, make_response, redirect, url_for, flash, Markup
 from flask_babel import Babel, gettext as _
+from flask_wtf import FlaskForm, RecaptchaField
+from wtforms import StringField, TextAreaField, EmailField
+from wtforms.validators import DataRequired, Email
 from encryption import encrypt_data, decrypt_data, hash_token
 from database import init_db, get_db
-from config import SECRET_KEY, TTL_MINUTES
+
+# Application settings from environment variables
+SECRET_KEY = os.environ.get("DROPCRYPT_SECRET")
+TTL_MINUTES = int(os.environ.get("DROPCRYPT_TTL", "60"))
+DEBUG = bool(int(os.environ.get("DROPCRYPT_DEBUG", "0")))
+
+# Contact form class
+class ContactForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    email = EmailField('Email', validators=[DataRequired(), Email()])
+    message = TextAreaField('Message', validators=[DataRequired()])
+    recaptcha = RecaptchaField()
 
 # Initialize Flask app
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
+# Flask configuration
+app.config['ENV'] = os.environ.get('FLASK_ENV', 'production')
+app.config['DEBUG'] = DEBUG
+
 # Babel configuration
 app.config['BABEL_DEFAULT_LOCALE'] = 'de'
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
+
+# ReCaptcha configuration
+app.config['RECAPTCHA_USE_SSL'] = True
+app.config['RECAPTCHA_DATA_ATTRS'] = {'theme': 'light'}
+app.config['RECAPTCHA_PUBLIC_KEY'] = os.environ.get('RECAPTCHA_SITE_KEY')
+app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ.get('RECAPTCHA_SECRET_KEY')
+
+# Email configuration
+SMTP_SERVER = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+SMTP_PORT = int(os.environ.get('SMTP_PORT', '587'))
+SMTP_USERNAME = os.environ.get('SMTP_USERNAME')
+SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD')
+SUPPORT_EMAIL = os.environ.get('SUPPORT_EMAIL', 'support@dropcrypt.org')
 
 # Language selection logic
 def get_locale():
@@ -116,9 +153,31 @@ def view(id):
 def about():
     return render_template('about.html')
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return render_template('contact.html')
+    form = ContactForm()
+    if request.method == 'POST' and form.validate():
+        try:
+            # Create email message
+            msg = MIMEText(f"Name: {form.name.data}\nEmail: {form.email.data}\n\nMessage:\n{form.message.data}")
+            msg['Subject'] = f'DropCrypt Contact Form: {form.name.data}'
+            msg['From'] = SMTP_USERNAME
+            msg['To'] = SUPPORT_EMAIL
+            
+            # Send email
+            with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+                server.starttls()
+                server.login(SMTP_USERNAME, SMTP_PASSWORD)
+                server.send_message(msg)
+                
+            flash(_('Your message has been sent successfully!'), 'success')
+            return redirect(url_for('contact'))
+            
+        except Exception as e:
+            flash(_('An error occurred while sending your message. Please try again later.'), 'error')
+            return render_template('contact.html', form=form)
+            
+    return render_template('contact.html', form=form)
 
 @app.route('/privacy')
 def privacy():

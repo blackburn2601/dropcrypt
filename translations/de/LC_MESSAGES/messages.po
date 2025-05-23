@@ -238,7 +238,7 @@ msgid "Generate Link"
 msgstr "Link generieren"
 
 msgid "Share Link"
-msgstr "Link teilen"
+msgstr "Link<br>teilen"
 
 msgid "Auto-delete"
 msgstr "Automatisch löschen"
@@ -294,7 +294,7 @@ msgid "Get secure link"
 msgstr "Sicheren Link erhalten"
 
 msgid "Share link"
-msgstr "Link teilen"
+msgstr "Link<br>teilen"
 
 msgid "Auto-delete"
 msgstr "Automatisch löschen"
@@ -376,4 +376,25 @@ msgstr "Nutzungsbedingungen"
 
 msgid "Donation Notice"
 msgstr "Spendenhinweis"
+
+msgid "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies."
+msgstr "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern. Durch die weitere Nutzung dieser Website stimmen Sie der Verwendung von Cookies zu."
+
+msgid "Accept All"
+msgstr "Alle akzeptieren"
+
+msgid "Cookie Settings"
+msgstr "Cookie-Einstellungen"
+
+msgid "Necessary (Required)"
+msgstr "Notwendig (Erforderlich)"
+
+msgid "Analytics"
+msgstr "Analyse"
+
+msgid "Marketing"
+msgstr "Marketing"
+
+msgid "Save Settings"
+msgstr "Einstellungen speichern"
 

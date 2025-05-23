@@ -15,6 +15,10 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="alternate icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='cookie-banner.css') }}">
+    <script src="{{ url_for('static', filename='js/cookie-consent.js') }}"></script>
+    {% block styles %}{% endblock %}
 </head>
 <body>
     <nav class="navbar">
@@ -39,25 +43,25 @@
                     </svg>
                     <span>dropcrypt</span>
                 </a>
-                <a href="{{ url_for('about') }}">
+                <a href="{{ url_for('about') }}" {% if request.endpoint == 'about' %}class="active"{% endif %}>
                     <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     {{ _('About') }}
                 </a>
-                <a href="{{ url_for('contact') }}">
+                <a href="{{ url_for('contact') }}" {% if request.endpoint == 'contact' %}class="active"{% endif %}>
                     <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     {{ _('Contact') }}
                 </a>
-                <a href="{{ url_for('privacy') }}">
+                <a href="{{ url_for('privacy') }}" {% if request.endpoint == 'privacy' %}class="active"{% endif %}>
                     <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                     {{ _('Privacy') }}
                 </a>
-                <a href="{{ url_for('statistics') }}">
+                <a href="{{ url_for('statistics') }}" {% if request.endpoint == 'statistics' %}class="active"{% endif %}>
                     <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
@@ -79,13 +83,27 @@
                         <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009.777 8.974.75.75 0 01.255 1.432A10.502 10.502 0 0112 18 10.5 10.5 0 013.453 4.086a.75.75 0 01.961-.617A4.5 4.5 0 009.528 1.718z"/>
                     </svg>
                 </button>
-                <div class="lang-buttons">
-                    <a href="{{ url_for('switch_language', lang='de') }}" class="lang-button{% if get_locale() == 'de' %} active{% endif %}" title="Deutsch">
+                <div class="lang-dropdown">
+                    <button class="lang-dropdown-btn" aria-haspopup="true" aria-expanded="false">
+                        {% if get_locale() == 'de' %}
                         <img src="{{ url_for('static', filename='images/flag-de.svg') }}" alt="DE" width="24" height="24">
-                    </a>
-                    <a href="{{ url_for('switch_language', lang='en') }}" class="lang-button{% if get_locale() == 'en' %} active{% endif %}" title="English">
+                        {% else %}
                         <img src="{{ url_for('static', filename='images/flag-en.svg') }}" alt="EN" width="24" height="24">
-                    </a>
+                        {% endif %}
+                        <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div class="lang-dropdown-content" role="menu">
+                        <a href="{{ url_for('switch_language', lang='de') }}" class="lang-option{% if get_locale() == 'de' %} active{% endif %}" role="menuitem">
+                            <img src="{{ url_for('static', filename='images/flag-de.svg') }}" alt="DE" width="24" height="24">
+                            <span>Deutsch</span>
+                        </a>
+                        <a href="{{ url_for('switch_language', lang='en') }}" class="lang-option{% if get_locale() == 'en' %} active{% endif %}" role="menuitem">
+                            <img src="{{ url_for('static', filename='images/flag-en.svg') }}" alt="EN" width="24" height="24">
+                            <span>English</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -98,25 +116,25 @@
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-links">
-                <a href="{{ url_for('legalnotice') }}">
+                <a href="{{ url_for('legalnotice') }}" {% if request.endpoint == 'legalnotice' %}class="active"{% endif %}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     {{ _('Legal Notice') }}
                 </a>
-                <a href="{{ url_for('privacypolicy') }}">
+                <a href="{{ url_for('privacypolicy') }}" {% if request.endpoint == 'privacypolicy' %}class="active"{% endif %}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                     {{ _('Privacy Policy') }}
                 </a>
-                <a href="{{ url_for('termsofservice') }}">
+                <a href="{{ url_for('termsofservice') }}" {% if request.endpoint == 'termsofservice' %}class="active"{% endif %}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     {{ _('Terms of Service') }}
                 </a>
-                <a href="{{ url_for('donationnotice') }}">
+                <a href="{{ url_for('donationnotice') }}" {% if request.endpoint == 'donationnotice' %}class="active"{% endif %}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
@@ -131,19 +149,33 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        // Theme toggle functionality
-        const themeToggle = document.querySelector('.theme-toggle');
-        const html = document.documentElement;
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
-    </script>
+    <div class="cookie-banner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <p>{{ _('We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.') }}</p>
+            </div>
+            <div class="cookie-buttons">
+                <button id="acceptAll" class="cookie-btn accept">{{ _('Accept All') }}</button>
+                <button id="showSettings" class="cookie-btn">{{ _('Cookie Settings') }}</button>
+            </div>
+        </div>
+        <div class="cookie-settings">
+            <div class="cookie-option">
+                <input type="checkbox" id="necessary" checked disabled class="required">
+                <label for="necessary">{{ _('Necessary (Required)') }}</label>
+            </div>
+            <div class="cookie-option">
+                <input type="checkbox" id="analytics">
+                <label for="analytics">{{ _('Analytics') }}</label>
+            </div>
+            <div class="cookie-option">
+                <input type="checkbox" id="marketing">
+                <label for="marketing">{{ _('Marketing') }}</label>
+            </div>
+            <div class="cookie-buttons" style="justify-content: flex-end; margin-top: 1rem;">
+                <button id="acceptSelected" class="cookie-btn">{{ _('Save Settings') }}</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
