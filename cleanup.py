@@ -1,40 +1,67 @@
+import os
 import time
-from datetime import datetime
-from database import get_db
+import psycopg2
+from datetime import datetime, timedelta
+import logging
 
-def cleanup_expired_transactions():
-    """Delete transactions where current time is greater than expires_at"""
-    current_time = datetime.utcnow()
-    
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+def get_db():
+    """Get database connection."""
+    return psycopg2.connect(
+        dbname=os.environ.get('POSTGRES_DB', 'dropcrypt'),
+        user=os.environ.get('POSTGRES_USER', 'dropcrypt'),
+        password=os.environ.get('POSTGRES_PASSWORD', 'dropcrypt'),
+        host=os.environ.get('POSTGRES_HOST', 'localhost')
+    )
+
+def cleanup_expired():
+    """Clean up expired transactions and log them to history."""
     with get_db() as conn:
         with conn.cursor() as cur:
-            # Delete transactions where current time > expires_at
-            cur.execute("""
-                DELETE FROM transactions 
-                WHERE expires_at < %s 
-                RETURNING id, expires_at
-            """, (current_time,))
+            now = datetime.utcnow()
             
-            deleted = cur.fetchall()
-            if deleted:
-                for record in deleted:
-                    print(f"Deleted transaction {record[0]} (expired at {record[1]})")
-                print(f"Total deleted: {len(deleted)} expired transactions")
+            # First, identify expired transactions
+            cur.execute("""
+                SELECT id, created_at
+                FROM transactions 
+                WHERE expires_at < %s
+            """, (now,))
+            expired = cur.fetchall()
+            
+            if expired:
+                # Log expired transactions to history
+                cur.executemany("""
+                    INSERT INTO transactions_history (id, created_at, completed_at, completion_type)
+                    VALUES (%s, %s, %s, 'expired')
+                """, [(id, created_at, now) for id, created_at in expired])
+                
+                # Then delete them
+                cur.execute("""
+                    DELETE FROM transactions 
+                    WHERE expires_at < %s
+                """, (now,))
+                
+                logging.info(f"Cleaned up {len(expired)} expired transactions")
+            else:
+                logging.info("No expired transactions found")
 
-def run_cleanup_loop():
-    """Run the cleanup task every minute"""
-    print("Starting cleanup service...")
+def main():
+    """Main cleanup loop."""
+    logging.info("Starting cleanup service")
     
     while True:
         try:
-            current_time = datetime.utcnow()
-            print(f"Running cleanup check at {current_time}")
-            cleanup_expired_transactions()
+            cleanup_expired()
         except Exception as e:
-            print(f"Error during cleanup: {e}")
+            logging.error(f"Error during cleanup: {e}")
         
-        # Sleep for 1 minute
-        time.sleep(60)
+        # Sleep for 5 minutes
+        time.sleep(300)
 
 if __name__ == "__main__":
-    run_cleanup_loop() 
+    main() 

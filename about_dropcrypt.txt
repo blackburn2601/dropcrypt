@@ -1,0 +1,19 @@
+dropcrypt – Deine vertrauliche Datenbrücke im digitalen Raum
+
+In einer Zeit, in der digitale Kommunikation allgegenwärtig ist, wächst auch das Bedürfnis nach absoluter Vertraulichkeit und Kontrolle über sensible Informationen. Genau hier setzt dropcrypt an – ein minimalistisches, selbst gehostetes Tool zur einmaligen, verschlüsselten Übertragung vertraulicher Daten zwischen zwei Parteien.
+
+Das Ziel von dropcrypt ist klar: eine einfache, sichere und benutzerfreundliche Plattform bereitzustellen, mit der man temporäre Nachrichten wie Passwörter, Zugangsdaten, API-Schlüssel oder vertrauliche Hinweise sicher und nachvollziehbar teilen kann – ganz ohne Account, ohne Drittanbieter und ohne unnötige Datenverarbeitung.
+
+Jede übermittelte Nachricht wird bei dropcrypt clientseitig verschlüsselt und mit einem eindeutigen Hash versehen. Der Link zur Transaktion enthält neben dem Hash auch ein Einmal-Token, welches dafür sorgt, dass die gespeicherten Daten nur ein einziges Mal abgerufen werden können. Danach wird die Transaktion vollständig aus der Datenbank entfernt. Sollte der Empfänger die Daten nicht abrufen, werden sie spätestens nach 60 Minuten automatisch gelöscht. Damit entsteht eine kurzlebige, digitale Nachricht – ...
+
+Technisch basiert dropcrypt auf einem schlanken Open-Source-Stack. Die gesamte Anwendung läuft in einem Docker-Container, lässt sich vollständig selbst hosten und benötigt keine externen Dienste. Transparenz steht im Mittelpunkt: Der Quellcode ist offen einsehbar – jede:r kann sich davon überzeugen, wie die Verschlüsselung funktioniert. So wird Vertrauen nicht durch Marketing geschaffen, sondern durch Nachvollziehbarkeit.
+
+dropcrypt erhebt keine Nutzerdaten, speichert keine IP-Adressen dauerhaft und verwendet nur ein Cookie – und das ausschließlich zur Speicherung der bevorzugten Spracheinstellung.
+
+Das Projekt entstand aus dem Wunsch heraus, eine elegante Lösung für ein häufiges Problem zu entwickeln: Wie übermittelt man sensible Daten sicher, ohne auf unsichere oder kontrollierte Messenger, unverschlüsselte Mails oder unzuverlässige Zwischenlösungen zurückzugreifen?
+
+dropcrypt ist unser Beitrag zu mehr digitaler Selbstbestimmung und Datenschutz – unabhängig, quelloffen und für alle zugänglich.
+
+Du möchtest das Projekt unterstützen? Spenden sind willkommen, aber nicht erforderlich. Jede Zeile Code, jedes Feedback und jeder Einsatz zählt.
+
+Vertraulichkeit sollte kein Luxus sein – mit dropcrypt wird sie zum Standard.
