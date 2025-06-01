@@ -1,9 +1,0 @@
-Flask==2.3.3
-Flask-Babel==4.0.0
-cryptography==41.0.7
-waitress==2.1.2
-psycopg2-binary==2.9.9
-Flask-WTF==1.2.1
-requests==2.31.0
-email-validator==2.1.0.post1
-python-dotenv==1.0.0
