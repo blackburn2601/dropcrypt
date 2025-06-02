@@ -53,7 +53,7 @@ function Home() {
     const startTime = Date.now();
     
     try {
-      const response = await fetch('http://localhost:80/api/messages/create', {
+      const response = await fetch('/api/messages/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,9 @@ function Home() {
   const handleCopy = async () => {
     console.log(result.token);
     if (result && result.accessToken && result.token) {
-      const link = `http://localhost:3000/view/${result.accessToken}?token=${result.token}`;
+      // Get the current origin (protocol + hostname + port)
+      const origin = window.location.origin;
+      const link = `${origin}/view/${result.accessToken}?token=${result.token}`;
       await navigator.clipboard.writeText(link);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -219,7 +221,7 @@ function Home() {
             </p>
             <div className="result-content">
               <div className="result-link">
-                {`http://localhost:3000/view/${result.accessToken}?token=${result.token}`}
+                {`${window.location.origin}/view/${result.accessToken}?token=${result.token}`}
               </div>
               <button onClick={handleCopy} className="copy-btn">
                 {copied ? <FaCheck /> : <FaCopy />}
