@@ -23,6 +23,15 @@ function ViewMessage() {
   const [searchParams] = useSearchParams();
   const encryptionKey = searchParams.get('token');
   
+  // Debug logging
+  console.log('URL Parameters:', {
+    accessToken,
+    encryptionKey,
+    fullUrl: window.location.href,
+    search: window.location.search,
+    pathname: window.location.pathname
+  });
+  
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,7 +51,7 @@ function ViewMessage() {
       }
 
       try {
-        const url = `http://localhost:80/api/messages/view/${accessToken}?token=${encryptionKey}`;
+        const url = `/api/messages/view/${accessToken}?token=${encryptionKey}`;
         console.log('Making API call to:', url);
         
         const response = await fetch(url, {
@@ -223,17 +232,28 @@ function ViewMessage() {
             )}
 
             <div style={{ 
-              background: 'rgba(220, 53, 69, 0.1)', 
-              border: '2px solid rgba(220, 53, 69, 0.3)', 
+              background: 'rgba(220, 53, 69, 0.15)', 
+              border: '2px solid rgba(220, 53, 69, 0.4)', 
               borderRadius: '15px', 
               padding: '1.5rem',
               textAlign: 'center'
             }}>
-              <h3 style={{ color: '#dc3545', marginBottom: '1rem' }}>
+              <h3 style={{ 
+                color: '#e63946', 
+                marginBottom: '1rem',
+                fontSize: '1.2rem',
+                fontWeight: '600'
+              }}>
                 <FaShieldAlt style={{ marginRight: '0.5rem' }} />
                 Security Information
               </h3>
-              <p style={{ color: '#721c24', margin: 0 }}>
+              <p style={{ 
+                color: '#d62828', 
+                margin: 0,
+                fontSize: '1.1rem',
+                lineHeight: '1.5',
+                fontWeight: '500'
+              }}>
                 This message has been automatically and permanently deleted from our servers. 
                 The sender will need to create a new encrypted message if they want to share it again.
               </p>
