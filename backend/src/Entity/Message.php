@@ -20,9 +20,6 @@ class Message
     #[ORM\Column(length: 64)]
     private ?string $accessToken = null;
 
-    #[ORM\Column(length: 64)]
-    private ?string $encryptionKeyHash = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $expiresAt = null;
 
@@ -35,6 +32,7 @@ class Message
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->isViewed = false;
     }
 
     public function getId(): ?int
@@ -61,17 +59,6 @@ class Message
     public function setAccessToken(string $accessToken): static
     {
         $this->accessToken = $accessToken;
-        return $this;
-    }
-
-    public function getEncryptionKeyHash(): ?string
-    {
-        return $this->encryptionKeyHash;
-    }
-
-    public function setEncryptionKeyHash(string $encryptionKeyHash): static
-    {
-        $this->encryptionKeyHash = $encryptionKeyHash;
         return $this;
     }
 
