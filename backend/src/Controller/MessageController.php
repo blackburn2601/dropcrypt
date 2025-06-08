@@ -31,16 +31,12 @@ class MessageController extends AbstractController
             return $this->json(['error' => 'Missing required fields'], 400);
         }
 
-        // Generate a random encryption key
-        $encryptionKey = bin2hex(random_bytes(32));
-        $encryptedContent = $this->encryptionService->encrypt($data['content'], $encryptionKey);
+        // Generate access token only, content is already encrypted by client
         $accessToken = $this->encryptionService->generateAccessToken();
-        $encryptionKeyHash = hash('sha256', $encryptionKey);
 
         $message = new Message();
-        $message->setEncryptedContent($encryptedContent);
+        $message->setEncryptedContent($data['content']); // Store already encrypted content
         $message->setAccessToken($accessToken);
-        $message->setEncryptionKeyHash($encryptionKeyHash);
         $message->setExpiresAt(new \DateTimeImmutable('+' . $data['expiresIn']));
 
         $errors = $this->validator->validate($message);
@@ -53,13 +49,12 @@ class MessageController extends AbstractController
 
         return $this->json([
             'accessToken' => $message->getAccessToken(),
-            'token' => $encryptionKey,
             'expiresAt' => $message->getExpiresAt()->format('c')
         ]);
     }
 
     #[Route('/view/{accessToken}', name: 'api_messages_view', methods: ['GET'])]
-    public function view(string $accessToken, Request $request): JsonResponse
+    public function view(string $accessToken): JsonResponse
     {
         $message = $this->entityManager->getRepository(Message::class)->findOneBy(['accessToken' => $accessToken]);
 
@@ -67,19 +62,23 @@ class MessageController extends AbstractController
             return new JsonResponse(['error' => 'Message not found or already expired'], Response::HTTP_NOT_FOUND);
         }
 
-        $key = $request->query->get('token');
-
-        if (!$key) {
-            return new JsonResponse(['error' => 'Encryption key is required'], Response::HTTP_BAD_REQUEST);
+        if ($message->isExpired()) {
+            $this->entityManager->remove($message);
+            $this->entityManager->flush();
+            return new JsonResponse(['error' => 'Message has expired'], Response::HTTP_GONE);
         }
 
-        $keyHash = hash('sha256', $key);
-        if ($keyHash !== $message->getEncryptionKeyHash()) {
-            return new JsonResponse(['error' => 'Invalid encryption key'], Response::HTTP_BAD_REQUEST);
+        if ($message->isViewed()) {
+            return new JsonResponse(['error' => 'Message has already been viewed'], Response::HTTP_GONE);
         }
 
-        $decryptedContent = $this->encryptionService->decrypt($message->getEncryptedContent(), $key);
+        // Mark message as viewed and return encrypted content
+        $message->setIsViewed(true);
+        $this->entityManager->flush();
 
-        return new JsonResponse(['content' => $decryptedContent]);
+        return new JsonResponse([
+            'content' => $message->getEncryptedContent(),
+            'expiresAt' => $message->getExpiresAt()->format('c')
+        ]);
     }
 } 
