@@ -14,43 +14,33 @@ class Message
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 15000)]
-    private ?string $encryptedContent = null;
+    #[ORM\Column(length: 32, unique: true)]
+    private string $accessToken;
+
+    #[ORM\Column(type: 'text')]
+    private ?string $content = null;
 
     #[ORM\Column(length: 64)]
-    private ?string $accessToken = null;
+    private ?string $keyHash = null;
 
-    #[ORM\Column(length: 64)]
-    private ?string $encryptionKeyHash = null;
-
-    #[ORM\Column]
+    #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $expiresAt = null;
 
     #[ORM\Column]
-    private ?bool $isViewed = false;
+    private bool $isRead = false;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->accessToken = bin2hex(random_bytes(16));
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEncryptedContent(): ?string
-    {
-        return $this->encryptedContent;
-    }
-
-    public function setEncryptedContent(string $encryptedContent): static
-    {
-        $this->encryptedContent = $encryptedContent;
-        return $this;
     }
 
     public function getAccessToken(): ?string
@@ -64,14 +54,25 @@ class Message
         return $this;
     }
 
-    public function getEncryptionKeyHash(): ?string
+    public function getContent(): ?string
     {
-        return $this->encryptionKeyHash;
+        return $this->content;
     }
 
-    public function setEncryptionKeyHash(string $encryptionKeyHash): static
+    public function setContent(string $content): static
     {
-        $this->encryptionKeyHash = $encryptionKeyHash;
+        $this->content = $content;
+        return $this;
+    }
+
+    public function getKeyHash(): ?string
+    {
+        return $this->keyHash;
+    }
+
+    public function setKeyHash(string $keyHash): static
+    {
+        $this->keyHash = $keyHash;
         return $this;
     }
 
@@ -86,14 +87,14 @@ class Message
         return $this;
     }
 
-    public function isViewed(): ?bool
+    public function isRead(): bool
     {
-        return $this->isViewed;
+        return $this->isRead;
     }
 
-    public function setIsViewed(bool $isViewed): static
+    public function setIsRead(bool $isRead): static
     {
-        $this->isViewed = $isViewed;
+        $this->isRead = $isRead;
         return $this;
     }
 

@@ -1,16 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
-
-        {% block javascripts %}
-        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}DropCrypt - Secure Message Sharing{% endblock %}</title>
+        <link rel="icon" href="{{ asset('favicon.ico') }}">
+        
+        {# Modern CSS Framework #}
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+        
+        {# Custom styles #}
+        <style>
+            .fade-enter-active, .fade-leave-active {
+                transition: opacity 0.3s ease;
+            }
+            .fade-enter-from, .fade-leave-to {
+                opacity: 0;
+            }
+            .slide-up-enter-active, .slide-up-leave-active {
+                transition: all 0.3s ease-out;
+            }
+            .slide-up-enter-from, .slide-up-leave-to {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+        </style>
+        
+        {% block stylesheets %}{% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="bg-gray-50 min-h-screen">
+        <nav class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <a href="{{ path('app_home') }}" class="text-2xl font-bold text-indigo-600">DropCrypt</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <a href="{{ path('app_message_new') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                            Create Message
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="animate__animated animate__fadeIn mb-4 p-4 rounded-md {% if label == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+        </main>
+
+        {# Modern JavaScript #}
+        <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+        {% block javascripts %}{% endblock %}
     </body>
 </html>
