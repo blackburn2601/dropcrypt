@@ -1,6 +1,6 @@
 # DropCrypt
 
-A secure, end-to-end encrypted messaging system.
+A secure, end-to-end encrypted messaging system with a modern, integrated frontend.
 
 ## Features
 
@@ -9,6 +9,8 @@ A secure, end-to-end encrypted messaging system.
 - Self-destructing messages
 - Custom expiration times
 - Unique access tokens
+- Modern, responsive UI with animations
+- Integrated frontend and backend
 
 ## Requirements
 
@@ -43,7 +45,7 @@ The setup script automatically:
 
 If you prefer to set up the application manually or need to customize the configuration:
 
-1. Create environment files:
+1. Create environment file:
 ```bash
 cp backend/.env.example backend/.env
 ```
@@ -97,15 +99,14 @@ Important environment variables explained:
 The project uses a Docker-based development environment:
 
 - Backend: Symfony 6.4
-- Frontend: React
+- Frontend: Twig templates with Tailwind CSS
 - Database: PostgreSQL 15
 - Infrastructure: Docker with Nginx, PHP-FPM
 
 ### Container Structure
 
-- **nginx**: Web server, handles both frontend and API requests
+- **nginx**: Web server, handles all requests
 - **php**: PHP-FPM container running the Symfony backend
-- **frontend**: Node.js container for building the React application
 - **postgres**: PostgreSQL database server
 
 ### Development Tips
@@ -162,29 +163,20 @@ The project uses a Docker-based development environment:
 
 ## Troubleshooting
 
-1. **Container Issues**
-   ```bash
-   # Rebuild containers
-   docker compose down -v
-   docker compose up -d --build
-   ```
+1. **Database Connection Issues**
+   - Check if PostgreSQL container is running: `docker compose ps`
+   - Verify database credentials in `.env`
+   - Check logs: `docker compose logs postgres`
 
-2. **Permission Problems**
-   ```bash
-   # Reset file permissions
-   docker compose exec php chown -R symfony:symfony .
-   ```
+2. **Application Issues**
+   - Clear cache: `docker compose exec php bin/console cache:clear`
+   - Check logs: `docker compose logs php`
+   - Verify file permissions: `docker compose exec php ls -la /var/www`
 
-3. **Database Issues**
-   ```bash
-   # Check database status
-   docker compose exec postgres pg_isready -U dropcrypt
-   ```
-
-4. **Common Problems**
-   - **502 Bad Gateway**: Check if PHP-FPM is running
-   - **Database Connection Error**: Verify PostgreSQL is healthy
-   - **Missing Dependencies**: Run setup script again
+3. **Nginx Issues**
+   - Check configuration: `docker compose exec nginx nginx -t`
+   - View logs: `docker compose logs nginx`
+   - Verify file permissions: `docker compose exec nginx ls -la /var/www/public`
 
 ## License
 
