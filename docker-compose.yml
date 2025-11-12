@@ -18,23 +18,24 @@ services:
     volumes:
       - ./backend:/var/www
     environment:
-      - APP_ENV=dev
-      - DATABASE_URL=postgresql://dropcrypt:dropcrypt@postgres:5432/dropcrypt?serverVersion=15&charset=utf8
+      - APP_ENV=${APP_ENV}
+      - DATABASE_URL=${DATABASE_URL}
     depends_on:
-      - postgres
+      - mysql
     networks:
       - dropcrypt
 
-  postgres:
-    image: postgres:15-alpine
+  mysql:
+    image: mysql:8.0
     environment:
-      - POSTGRES_USER=dropcrypt
-      - POSTGRES_PASSWORD=dropcrypt
-      - POSTGRES_DB=dropcrypt
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:3306"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
     networks:
       - dropcrypt
 
@@ -43,4 +44,4 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data: 
+  mysql_data: 
