@@ -4,76 +4,165 @@
 
 {% block body %}
 <div class="animate__animated animate__fadeIn">
-    <div class="text-center py-16">
-        <div class="flex justify-center mb-8">
-            <div class="border-2 border-00ff88 p-6" style="border-color: #00ff88; box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);">
-                <svg class="h-20 w-20" style="color: #00ff88; filter: drop-shadow(0 0 10px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Hero Section -->
+    <div class="text-center py-8 sm:py-16 px-4" style="background: rgba(20, 20, 20, 0.7); border-top: 1px solid rgba(37, 99, 235, 0.1); border-bottom: 1px solid rgba(37, 99, 235, 0.1);">
+        <div class="flex justify-center mb-6 sm:mb-8">
+            <div class="bg-gradient-to-br from-blue-600 to-blue-500 p-4 sm:p-6 rounded-2xl icon-security shadow-2xl">
+                <svg class="h-16 w-16 sm:h-24 sm:w-24 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                 </svg>
             </div>
         </div>
-        <h1 class="text-5xl font-extrabold sm:text-6xl sm:tracking-tight lg:text-7xl mb-6 glitch-text" data-text="SECURE MESSAGE SHARING" style="color: #00ff88; text-shadow: 0 0 10px #00ff88;">
-            SECURE MESSAGE SHARING
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold sm:tracking-tight mb-4 sm:mb-6 px-2" style="color: #f1f5f9;">
+            Secure Message Sharing
         </h1>
-        <p class="mt-5 max-w-2xl mx-auto text-xl font-medium" style="color: #00ffff;">
-            <span class="terminal-prompt"></span>Share sensitive information securely with end-to-end encryption
+        <p class="mt-4 sm:mt-5 max-w-3xl mx-auto text-base sm:text-xl font-medium leading-relaxed px-2" style="color: #cbd5e1;">
+            Share sensitive information securely with military-grade end-to-end encryption. Your messages are encrypted on your device and can only be decrypted by the intended recipient.
         </p>
+        <div class="mt-4 sm:mt-6 flex flex-wrap justify-center items-center gap-2 sm:gap-4 px-2">
+            <span class="trust-badge text-xs sm:text-sm">AES-256 Encrypted</span>
+            <span class="trust-badge text-xs sm:text-sm">Zero-Knowledge</span>
+            <span class="trust-badge text-xs sm:text-sm">Self-Destructing</span>
+            <span class="trust-badge text-xs sm:text-sm">One-Time View</span>
+        </div>
     </div>
 
-    <div class="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        <div class="feature-hacker p-6">
+    <!-- Features Grid -->
+    <div class="py-8 sm:py-16 grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3 px-4 sm:px-6 lg:px-8" style="background: rgba(35, 35, 35, 0.8); border-top: 1px solid rgba(37, 99, 235, 0.15); border-bottom: 1px solid rgba(37, 99, 235, 0.15);">
+        <div class="feature-security p-6">
             <div class="flex items-start">
-                <div class="flex-shrink-0 border-2 border-00ff88 p-3" style="border-color: #00ff88;">
-                    <svg class="h-8 w-8" style="color: #00ff88; filter: drop-shadow(0 0 5px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex-shrink-0 bg-gradient-to-br from-blue-600 to-blue-500 p-3 rounded-lg icon-security">
+                    <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                     </svg>
                 </div>
                 <div class="ml-5 flex-1">
-                    <h3 class="text-xl font-bold mb-2" style="color: #00ff88;">[ENCRYPTION]</h3>
-                    <p class="text-sm leading-relaxed" style="color: #00ffff;">Your messages are encrypted and can only be read by the intended recipient.</p>
+                    <h3 class="text-xl font-bold mb-2" style="color: #60a5fa;">End-to-End Encryption</h3>
+                    <p class="text-sm leading-relaxed" style="color: #e2e8f0;">Messages are encrypted using AES-256-GCM encryption before leaving your device. Only the recipient with the correct decryption key can read your message.</p>
                 </div>
             </div>
         </div>
 
-        <div class="feature-hacker p-6">
+        <div class="feature-security p-6">
             <div class="flex items-start">
-                <div class="flex-shrink-0 border-2 border-00ff88 p-3" style="border-color: #00ff88;">
-                    <svg class="h-8 w-8" style="color: #00ff88; filter: drop-shadow(0 0 5px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex-shrink-0 bg-gradient-to-br from-blue-600 to-blue-500 p-3 rounded-lg icon-security">
+                    <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
                 <div class="ml-5 flex-1">
-                    <h3 class="text-xl font-bold mb-2" style="color: #00ff88;">[SELF-DESTRUCT]</h3>
-                    <p class="text-sm leading-relaxed" style="color: #00ffff;">Messages automatically delete themselves after being read.</p>
+                    <h3 class="text-xl font-bold mb-2" style="color: #60a5fa;">Self-Destructing Messages</h3>
+                    <p class="text-sm leading-relaxed" style="color: #e2e8f0;">Each message can only be viewed once. After reading, the message is permanently deleted from our servers. You can also set expiration times from 1 hour to 7 days.</p>
                 </div>
             </div>
         </div>
 
-        <div class="feature-hacker p-6">
+        <div class="feature-security p-6">
             <div class="flex items-start">
-                <div class="flex-shrink-0 border-2 border-00ff88 p-3" style="border-color: #00ff88;">
-                    <svg class="h-8 w-8" style="color: #00ff88; filter: drop-shadow(0 0 5px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex-shrink-0 bg-gradient-to-br from-blue-600 to-blue-500 p-3 rounded-lg icon-security">
+                    <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
                 </div>
                 <div class="ml-5 flex-1">
-                    <h3 class="text-xl font-bold mb-2" style="color: #00ff88;">[SECURE]</h3>
-                    <p class="text-sm leading-relaxed" style="color: #00ffff;">Built with security and privacy as the top priorities.</p>
+                    <h3 class="text-xl font-bold mb-2" style="color: #60a5fa;">Zero-Knowledge Architecture</h3>
+                    <p class="text-sm leading-relaxed" style="color: #e2e8f0;">We use a zero-knowledge architecture. Your encryption keys never leave your device, and we cannot decrypt your messages even if we wanted to.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="mt-16 text-center">
-        <a href="{{ path('app_message_new') }}" class="btn-hacker inline-flex items-center px-8 py-4 text-lg font-bold focus:outline-none">
-            <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            INITIATE TRANSMISSION
-            <svg class="ml-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
-        </a>
+    <!-- How It Works Section -->
+    <div class="py-12 sm:py-20 px-4" style="background: rgba(20, 20, 20, 0.7); border-top: 1px solid rgba(37, 99, 235, 0.1); border-bottom: 1px solid rgba(37, 99, 235, 0.1);">
+        <div class="text-center mb-8 sm:mb-12">
+            <h2 class="text-2xl sm:text-4xl font-bold mb-3 sm:mb-4" style="color: #f1f5f9;">How It Works</h2>
+            <p class="max-w-2xl mx-auto text-base sm:text-lg px-2" style="color: #cbd5e1;">Simple, secure, and private in three easy steps</p>
+        </div>
+        
+        <div class="grid gap-6 sm:gap-8 md:grid-cols-3 max-w-5xl mx-auto">
+            <div class="security-card p-8 text-center">
+                <div class="bg-gradient-to-br from-blue-600 to-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 icon-security">
+                    <span class="text-2xl font-bold text-white">1</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3" style="color: #60a5fa;">Create Your Message</h3>
+                <p class="text-sm leading-relaxed" style="color: #e2e8f0;">Type your message and choose an expiration time. Your message is encrypted on your device using a randomly generated key.</p>
+            </div>
+            
+            <div class="security-card p-8 text-center">
+                <div class="bg-gradient-to-br from-blue-600 to-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 icon-security">
+                    <span class="text-2xl font-bold text-white">2</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3" style="color: #60a5fa;">Share the Link</h3>
+                <p class="text-sm leading-relaxed" style="color: #e2e8f0;">Copy the secure link and share it with your recipient. The link contains both the message location and the decryption key.</p>
+            </div>
+            
+            <div class="security-card p-8 text-center">
+                <div class="bg-gradient-to-br from-blue-600 to-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 icon-security">
+                    <span class="text-2xl font-bold text-white">3</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3" style="color: #60a5fa;">Message Self-Destructs</h3>
+                <p class="text-sm leading-relaxed" style="color: #e2e8f0;">After the recipient views the message once, it's permanently deleted. The message also expires based on your selected time.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Use Cases Section -->
+    <div class="py-12 sm:py-20 px-4" style="background: rgba(35, 35, 35, 0.8); border-top: 1px solid rgba(37, 99, 235, 0.15); border-bottom: 1px solid rgba(37, 99, 235, 0.15);">
+        <div class="text-center mb-8 sm:mb-12">
+            <h2 class="text-2xl sm:text-4xl font-bold mb-3 sm:mb-4" style="color: #f1f5f9;">Perfect For</h2>
+            <p class="max-w-2xl mx-auto text-base sm:text-lg px-2" style="color: #cbd5e1;">Ideal for sharing sensitive information securely</p>
+        </div>
+        
+        <div class="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
+            <div class="feature-security p-5 text-center">
+                <svg class="h-10 w-10 mx-auto mb-3" style="color: #60a5fa;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                </svg>
+                <h4 class="font-semibold mb-2" style="color: #cbd5e1;">Passwords</h4>
+                <p class="text-xs" style="color: #94a3b8;">Share temporary passwords securely</p>
+            </div>
+            
+            <div class="feature-security p-5 text-center">
+                <svg class="h-10 w-10 mx-auto mb-3" style="color: #60a5fa;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <h4 class="font-semibold mb-2" style="color: #cbd5e1;">API Keys</h4>
+                <p class="text-xs" style="color: #94a3b8;">Exchange API credentials safely</p>
+            </div>
+            
+            <div class="feature-security p-5 text-center">
+                <svg class="h-10 w-10 mx-auto mb-3" style="color: #60a5fa;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                <h4 class="font-semibold mb-2" style="color: #cbd5e1;">Personal Info</h4>
+                <p class="text-xs" style="color: #94a3b8;">Share sensitive personal data</p>
+            </div>
+            
+            <div class="feature-security p-5 text-center">
+                <svg class="h-10 w-10 mx-auto mb-3" style="color: #60a5fa;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                <h4 class="font-semibold mb-2" style="color: #cbd5e1;">Confidential Data</h4>
+                <p class="text-xs" style="color: #94a3b8;">Any sensitive information</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="py-12 sm:py-20 text-center px-4" style="background: rgba(20, 20, 20, 0.7); border-top: 1px solid rgba(37, 99, 235, 0.1);">
+        <div class="security-card p-6 sm:p-12 max-w-3xl mx-auto">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4" style="color: #f1f5f9;">Ready to Send Secure Messages?</h2>
+            <p class="text-base sm:text-lg mb-6 sm:mb-8" style="color: #cbd5e1;">Start protecting your sensitive information today. No account required, completely free.</p>
+            <a href="{{ path('app_message_new') }}" class="btn-security inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold focus:outline-none">
+                <svg class="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Create Secure Message
+                <svg class="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %} 

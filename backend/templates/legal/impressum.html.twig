@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Impressum - DropCrypt{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="security-card p-8">
+            <div class="flex items-center mb-8">
+                <div class="bg-gradient-to-br from-blue-600 to-blue-500 p-3 rounded-lg mr-4 icon-security">
+                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-extrabold" style="color: #f1f5f9;">Impressum</h1>
+            </div>
+
+            <div class="prose prose-invert max-w-none" style="color: #e2e8f0;">
+                <div class="space-y-6">
+                    <section>
+                        <h2 class="text-2xl font-bold mb-4" style="color: #60a5fa;">Information according to § 5 TMG</h2>
+                        <div class="space-y-2">
+                            <p><strong style="color: #cbd5e1;">Company Name:</strong> <span style="color: #e2e8f0;">DropCrypt</span></p>
+                            <p><strong style="color: #cbd5e1;">Address:</strong> <span style="color: #e2e8f0;">[Your Address]</span></p>
+                            <p><strong style="color: #cbd5e1;">City, Postal Code:</strong> <span style="color: #e2e8f0;">[Your City, Postal Code]</span></p>
+                            <p><strong style="color: #cbd5e1;">Country:</strong> <span style="color: #e2e8f0;">[Your Country]</span></p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 class="text-2xl font-bold mb-4" style="color: #60a5fa;">Contact</h2>
+                        <div class="space-y-2">
+                            <p><strong style="color: #cbd5e1;">Email:</strong> <a href="mailto:contact@dropcrypt.com" class="hover:underline" style="color: #60a5fa;">contact@dropcrypt.com</a></p>
+                            <p><strong style="color: #cbd5e1;">Phone:</strong> <span style="color: #e2e8f0;">[Your Phone Number]</span></p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 class="text-2xl font-bold mb-4" style="color: #60a5fa;">Responsible for content</h2>
+                        <p style="color: #e2e8f0;">According to § 55 Abs. 2 RStV:</p>
+                        <div class="mt-2 space-y-2">
+                            <p><strong style="color: #cbd5e1;">Name:</strong> <span style="color: #e2e8f0;">[Your Name]</span></p>
+                            <p><strong style="color: #cbd5e1;">Address:</strong> <span style="color: #e2e8f0;">[Your Address]</span></p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 class="text-2xl font-bold mb-4" style="color: #60a5fa;">Disclaimer</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2" style="color: #60a5fa;">Liability for Content</h3>
+                                <p style="color: #e2e8f0;">As service providers, we are liable for own contents of these websites according to Sec. 7, paragraph 1 German Telemedia Act (TMG). However, according to Sec. 8 to 10 German Telemedia Act (TMG), service providers are not under obligation to permanently monitor submitted or stored information or to search for evidences that indicate illegal activities.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2" style="color: #60a5fa;">Liability for Links</h3>
+                                <p style="color: #e2e8f0;">Our offer includes links to external websites of third parties on whose contents we have no influence. Therefore, we cannot assume any liability for these external contents. The respective provider or operator of the sites is always responsible for the contents of the linked sites.</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

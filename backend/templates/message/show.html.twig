@@ -3,75 +3,147 @@
 {% block title %}View Message{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-4 py-8">
-    <div class="max-w-2xl mx-auto">
-        <div class="terminal-card p-8">
-            <div class="flex items-center mb-8">
-                <div class="border-2 border-00ff88 p-3 mr-4" style="border-color: #00ff88;">
-                    <svg class="h-7 w-7" style="color: #00ff88; filter: drop-shadow(0 0 5px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="container mx-auto px-4 sm:px-6 py-4 sm:py-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="security-card p-4 sm:p-8">
+            <div class="flex items-center mb-6 sm:mb-8">
+                <div class="bg-gradient-to-br from-blue-600 to-blue-500 p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 flex-shrink-0 icon-security">
+                    <svg class="h-6 w-6 sm:h-7 sm:w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                     </svg>
                 </div>
-                <h1 class="text-3xl font-extrabold" style="color: #00ff88; text-shadow: 0 0 10px #00ff88;">[VIEW MESSAGE]</h1>
+                <div class="flex-1 min-w-0">
+                    <h1 class="text-2xl sm:text-3xl font-extrabold" style="color: #f1f5f9;">View Secure Message</h1>
+                    <p class="text-xs sm:text-sm mt-1" style="color: #cbd5e1;">Decrypting your secure message using the provided encryption key...</p>
+                </div>
             </div>
 
-            <div id="loading" class="text-center py-12">
+            <!-- Security Info -->
+            <div class="mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg" style="background: rgba(37, 99, 235, 0.1); border: 1px solid rgba(37, 99, 235, 0.3);">
+                <div class="flex items-start">
+                    <svg class="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3 flex-shrink-0 mt-0.5" style="color: #60a5fa;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div>
+                        <p class="text-xs sm:text-sm font-semibold mb-1" style="color: #60a5fa;">Important Security Notice</p>
+                        <ul class="text-xs space-y-1" style="color: #cbd5e1;">
+                            <li>• This message can only be viewed <strong>once</strong> - make sure to read everything you need</li>
+                            <li>• After viewing, the message will be permanently deleted from our servers</li>
+                            <li>• The message will also expire based on the sender's selected expiration time</li>
+                            <li>• Decryption happens on your device - we cannot see the message content</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loading" class="text-center py-8 sm:py-12">
                 <div class="flex flex-col items-center">
                     <div class="relative">
-                        <div class="animate-spin rounded-full h-16 w-16 border-4 mx-auto" style="border-color: rgba(0, 255, 136, 0.2); border-top-color: #00ff88;"></div>
+                        <div class="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-4 mx-auto" style="border-color: rgba(37, 99, 235, 0.2); border-top-color: #60a5fa;"></div>
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <svg class="h-8 w-8 animate-pulse" style="color: #00ff88; filter: drop-shadow(0 0 5px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-6 w-6 sm:h-8 sm:w-8 animate-pulse icon-security" style="color: #60a5fa;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                             </svg>
                         </div>
                     </div>
-                    <div class="mt-6 flex items-center font-medium" style="color: #00ffff;">
-                        <span class="mr-2">></span>
-                        <p>DECRYPTING MESSAGE...</p>
+                    <div class="mt-4 sm:mt-6 flex items-center font-medium text-sm sm:text-base" style="color: #cbd5e1;">
+                        <svg class="h-4 w-4 sm:h-5 sm:w-5 mr-2 animate-pulse" style="color: #60a5fa;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                        <p>Decrypting message securely...</p>
                     </div>
                 </div>
             </div>
 
             <div id="error" class="hidden animate__animated animate__fadeIn">
-                <div class="terminal-card p-6" style="border-color: #ff0040;">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <div class="border-2 border-red-500 p-2" style="border-color: #ff0040;">
-                                <svg class="h-6 w-6" style="color: #ff0040; filter: drop-shadow(0 0 5px #ff0040);" viewBox="0 0 20 20" fill="currentColor">
+                <div class="security-card p-4 sm:p-6" style="border-color: rgba(239, 68, 68, 0.4);">
+                    <div class="flex flex-col sm:flex-row">
+                        <div class="flex-shrink-0 mb-3 sm:mb-0">
+                            <div class="bg-gradient-to-br from-red-600 to-red-500 p-2 rounded-lg icon-security">
+                                <svg class="h-5 w-5 sm:h-6 sm:w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                                 </svg>
                             </div>
                         </div>
-                        <div class="ml-4 flex-1">
-                            <h3 class="text-lg font-bold mb-1" style="color: #ff0040;">[ERROR]</h3>
-                            <p class="text-sm font-medium" style="color: #ff0040;" id="errorMessage"></p>
+                        <div class="ml-0 sm:ml-4 flex-1">
+                            <h3 class="text-base sm:text-lg font-bold mb-1" style="color: #ef4444;">Error</h3>
+                            <p class="text-xs sm:text-sm font-medium" style="color: #fca5a5;" id="errorMessage"></p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="message" class="hidden animate__animated animate__fadeIn">
-                <div class="terminal-card p-8 mb-6" style="border-color: #00ff88;">
-                    <div class="flex items-start">
-                        <div class="border-2 border-00ff88 p-3 mr-4 flex-shrink-0" style="border-color: #00ff88;">
-                            <svg class="h-6 w-6" style="color: #00ff88; filter: drop-shadow(0 0 5px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                <!-- Message Header Info -->
+                <div class="mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg" style="background: rgba(30, 30, 30, 0.6); border: 1px solid rgba(37, 99, 235, 0.2);">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+                        <div class="flex items-center">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5 mr-2" style="color: #60a5fa;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
+                            <span class="text-xs sm:text-sm" style="color: #cbd5e1;">Status: <strong style="color: #34d399;">Decrypted</strong></span>
                         </div>
-                        <div class="flex-1">
-                            <p id="messageContent" class="whitespace-pre-wrap leading-relaxed text-lg" style="color: #00ffff; font-family: 'JetBrains Mono', monospace;"></p>
+                        <div class="flex items-center">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5 mr-2" style="color: #60a5fa;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            <span class="text-xs sm:text-sm" style="color: #cbd5e1;">Encryption: <strong style="color: #34d399;">AES-256-GCM</strong></span>
                         </div>
                     </div>
                 </div>
-                <div class="terminal-card p-5" style="border-color: #ffaa00;">
-                    <div class="flex items-center">
-                        <div class="border-2 border-yellow-500 p-2 mr-3" style="border-color: #ffaa00;">
-                            <svg class="h-5 w-5" style="color: #ffaa00; filter: drop-shadow(0 0 5px #ffaa00);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                <!-- Message Content -->
+                <div class="security-card p-4 sm:p-8 mb-4 sm:mb-6" style="border-color: rgba(37, 99, 235, 0.4);">
+                    <div class="flex flex-col sm:flex-row items-start mb-3 sm:mb-4">
+                        <div class="bg-gradient-to-br from-blue-600 to-blue-500 p-2 sm:p-3 rounded-lg mr-0 sm:mr-4 mb-3 sm:mb-0 flex-shrink-0 icon-security">
+                            <svg class="h-5 w-5 sm:h-6 sm:w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1 w-full">
+                            <h3 class="text-base sm:text-lg font-semibold mb-2 sm:mb-3" style="color: #60a5fa;">Message Content</h3>
+                            <div class="p-3 sm:p-6 rounded-lg" style="background: rgba(26, 26, 26, 0.6); border: 1px solid rgba(37, 99, 235, 0.2);">
+                                <p id="messageContent" class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base" style="color: #f1f5f9; font-family: 'Inter', sans-serif; line-height: 1.6; word-wrap: break-word;"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warning Banner -->
+                <div class="security-card p-3 sm:p-5 mb-3 sm:mb-4" style="border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.05);">
+                    <div class="flex items-start">
+                        <div class="bg-gradient-to-br from-amber-500 to-amber-600 p-1.5 sm:p-2 rounded-lg mr-2 sm:mr-3 flex-shrink-0 icon-security">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                             </svg>
                         </div>
-                        <p class="text-sm font-bold" style="color: #ffaa00;">[WARNING] This message will be deleted after viewing.</p>
+                        <div class="flex-1">
+                            <p class="text-xs sm:text-sm font-semibold mb-1" style="color: #fcd34d;">One-Time View Warning</p>
+                            <p class="text-xs leading-relaxed" style="color: #fde68a;">
+                                This message has been marked as read and will be permanently deleted from our servers. 
+                                If you need to reference this information later, please save it to a secure location now. 
+                                The message link will no longer work after this viewing.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="security-card p-3 sm:p-5" style="border-color: rgba(37, 99, 235, 0.2);">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+                        <div class="flex items-center text-xs sm:text-sm" style="color: #94a3b8;">
+                            <svg class="h-3 w-3 sm:h-4 sm:w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>Message will be automatically deleted</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm" style="color: #94a3b8;">
+                            <svg class="h-3 w-3 sm:h-4 sm:w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                            <span>Secure and encrypted</span>
+                        </div>
                     </div>
                 </div>
             </div>
