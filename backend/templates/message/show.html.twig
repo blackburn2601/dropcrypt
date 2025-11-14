@@ -154,6 +154,12 @@
 <script src="{{ asset('js/encryption.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
+    {% if error %}
+        // Show error if message not found
+        showError('{{ error }}');
+        return;
+    {% endif %}
+
     const urlParams = new URLSearchParams(window.location.search);
     const key = urlParams.get('key');
 
@@ -170,7 +176,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const keyHash = await MessageEncryption.hashKey(key);
 
         // Fetch the message
-        const response = await fetch(`/message/api/{{ message.accessToken }}?keyHash=${encodeURIComponent(keyHash)}`);
+        const accessToken = '{{ accessToken }}';
+        const response = await fetch(`/message/api/${accessToken}?keyHash=${encodeURIComponent(keyHash)}`);
         const data = await response.json();
 
         if (!response.ok) {
@@ -184,6 +191,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('messageContent').textContent = decryptedContent;
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('message').classList.remove('hidden');
+
+        // Delete the message from the server after displaying it
+        try {
+            await fetch(`/message/api/${accessToken}?keyHash=${encodeURIComponent(keyHash)}`, {
+                method: 'DELETE'
+            });
+            // Message deleted successfully (silently handle - message is already displayed)
+        } catch (deleteError) {
+            // Silently handle deletion errors - message is already displayed to user
+            console.warn('Failed to delete message from server:', deleteError);
+        }
     } catch (error) {
         console.error('Error:', error);
         showError(error.message);
