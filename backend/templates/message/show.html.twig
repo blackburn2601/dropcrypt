@@ -5,33 +5,74 @@
 {% block body %}
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-2xl mx-auto">
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <div id="loading" class="text-center py-8">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-                <p class="mt-4 text-gray-600">Loading message...</p>
+        <div class="terminal-card p-8">
+            <div class="flex items-center mb-8">
+                <div class="border-2 border-00ff88 p-3 mr-4" style="border-color: #00ff88;">
+                    <svg class="h-7 w-7" style="color: #00ff88; filter: drop-shadow(0 0 5px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-extrabold" style="color: #00ff88; text-shadow: 0 0 10px #00ff88;">[VIEW MESSAGE]</h1>
             </div>
 
-            <div id="error" class="hidden">
-                <div class="bg-red-50 border-l-4 border-red-400 p-4">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            <div id="loading" class="text-center py-12">
+                <div class="flex flex-col items-center">
+                    <div class="relative">
+                        <div class="animate-spin rounded-full h-16 w-16 border-4 mx-auto" style="border-color: rgba(0, 255, 136, 0.2); border-top-color: #00ff88;"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="h-8 w-8 animate-pulse" style="color: #00ff88; filter: drop-shadow(0 0 5px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                             </svg>
                         </div>
-                        <div class="ml-3">
-                            <p class="text-sm text-red-700" id="errorMessage"></p>
+                    </div>
+                    <div class="mt-6 flex items-center font-medium" style="color: #00ffff;">
+                        <span class="mr-2">></span>
+                        <p>DECRYPTING MESSAGE...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="error" class="hidden animate__animated animate__fadeIn">
+                <div class="terminal-card p-6" style="border-color: #ff0040;">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <div class="border-2 border-red-500 p-2" style="border-color: #ff0040;">
+                                <svg class="h-6 w-6" style="color: #ff0040; filter: drop-shadow(0 0 5px #ff0040);" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4 flex-1">
+                            <h3 class="text-lg font-bold mb-1" style="color: #ff0040;">[ERROR]</h3>
+                            <p class="text-sm font-medium" style="color: #ff0040;" id="errorMessage"></p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="message" class="hidden">
-                <div class="prose max-w-none">
-                    <p id="messageContent" class="whitespace-pre-wrap"></p>
+            <div id="message" class="hidden animate__animated animate__fadeIn">
+                <div class="terminal-card p-8 mb-6" style="border-color: #00ff88;">
+                    <div class="flex items-start">
+                        <div class="border-2 border-00ff88 p-3 mr-4 flex-shrink-0" style="border-color: #00ff88;">
+                            <svg class="h-6 w-6" style="color: #00ff88; filter: drop-shadow(0 0 5px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p id="messageContent" class="whitespace-pre-wrap leading-relaxed text-lg" style="color: #00ffff; font-family: 'JetBrains Mono', monospace;"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="mt-6 text-sm text-gray-500">
-                    <p>This message will be deleted after viewing.</p>
+                <div class="terminal-card p-5" style="border-color: #ffaa00;">
+                    <div class="flex items-center">
+                        <div class="border-2 border-yellow-500 p-2 mr-3" style="border-color: #ffaa00;">
+                            <svg class="h-5 w-5" style="color: #ffaa00; filter: drop-shadow(0 0 5px #ffaa00);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <p class="text-sm font-bold" style="color: #ffaa00;">[WARNING] This message will be deleted after viewing.</p>
+                    </div>
                 </div>
             </div>
         </div>
