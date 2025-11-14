@@ -46,12 +46,10 @@ class MessageController extends AbstractController
     {
         $message = $this->messageRepository->findOneBy(['accessToken' => $accessToken]);
         
-        if (!$message) {
-            throw $this->createNotFoundException('Message not found');
-        }
-
         return $this->render('message/show.html.twig', [
             'message' => $message,
+            'accessToken' => $accessToken,
+            'error' => $message ? null : 'Message not found',
         ]);
     }
 
@@ -103,10 +101,41 @@ class MessageController extends AbstractController
         }
 
         $message->setIsRead(true);
+
         $this->entityManager->flush();
 
         return new JsonResponse([
             'content' => $message->getContent()
+        ]);
+    }
+
+    #[Route('/api/{accessToken}', name: 'app_message_api_delete', methods: ['DELETE'])]
+    public function apiDelete(string $accessToken, Request $request): JsonResponse
+    {
+        $message = $this->messageRepository->findOneBy(['accessToken' => $accessToken]);
+        
+        if (!$message) {
+            return new JsonResponse(['error' => 'Message not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $keyHash = $request->query->get('keyHash');
+
+        if (!$keyHash || $keyHash !== $message->getKeyHash()) {
+            return new JsonResponse(['error' => 'Invalid key hash'], Response::HTTP_FORBIDDEN);
+        }
+
+        // Allow deletion if message has not been read or if it is expired
+        // Prevent deletion only if message has been read AND is not expired
+        if (!$message->isRead() && !$message->isExpired()) {
+            return new JsonResponse(['error' => 'Cannot delete message: message has been read and is not expired'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->entityManager->remove($message);
+        $this->entityManager->flush();
+
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'Message deleted successfully'
         ]);
     }
 } 
