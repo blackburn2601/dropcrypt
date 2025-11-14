@@ -10,48 +10,273 @@
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
         
-        {# Custom styles #}
+        {# Custom styles - Hacker/IT Security Theme #}
         <style>
-            .fade-enter-active, .fade-leave-active {
-                transition: opacity 0.3s ease;
+            @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap');
+            
+            * {
+                font-family: 'JetBrains Mono', 'Share Tech Mono', 'Courier New', monospace;
             }
-            .fade-enter-from, .fade-leave-to {
+            
+            body {
+                background: #0a0a0a;
+                background-image: 
+                    radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.03) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.03) 0%, transparent 50%),
+                    linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+                min-height: 100vh;
+                color: #00ff88;
+                position: relative;
+                overflow-x: hidden;
+            }
+            
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: 
+                    repeating-linear-gradient(
+                        0deg,
+                        rgba(0, 255, 136, 0.03) 0px,
+                        transparent 1px,
+                        transparent 2px,
+                        rgba(0, 255, 136, 0.03) 3px
+                    );
+                pointer-events: none;
+                z-index: 1;
+            }
+            
+            /* Glitch effect */
+            @keyframes glitch {
+                0%, 100% { transform: translate(0); }
+                20% { transform: translate(-2px, 2px); }
+                40% { transform: translate(-2px, -2px); }
+                60% { transform: translate(2px, 2px); }
+                80% { transform: translate(2px, -2px); }
+            }
+            
+            @keyframes textGlow {
+                0%, 100% { text-shadow: 0 0 5px #00ff88, 0 0 10px #00ff88, 0 0 15px #00ff88; }
+                50% { text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88, 0 0 40px #00ff88; }
+            }
+            
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+            }
+            
+            /* Terminal-style navigation */
+            .hacker-nav {
+                background: rgba(0, 0, 0, 0.9);
+                border-bottom: 2px solid #00ff88;
+                box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+                backdrop-filter: blur(10px);
+            }
+            
+            /* Terminal-style card */
+            .terminal-card {
+                background: rgba(0, 0, 0, 0.8);
+                border: 2px solid #00ff88;
+                border-radius: 4px;
+                box-shadow: 
+                    0 0 10px rgba(0, 255, 136, 0.3),
+                    inset 0 0 20px rgba(0, 255, 136, 0.05);
+                position: relative;
+            }
+            
+            .terminal-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(90deg, transparent, #00ff88, transparent);
+                animation: pulse 2s ease-in-out infinite;
+            }
+            
+            /* Hacker-style input */
+            .input-hacker {
+                background-color: #000000;
+                border: 2px solid #00ff88;
+                color: #00ff88;
+                font-family: 'JetBrains Mono', monospace;
+                transition: all 0.3s ease;
+            }
+            
+            .input-hacker:hover {
+                border-color: #00ffff;
+                box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            }
+            
+            .input-hacker:focus {
+                background-color: #0a0a0a;
+                border-color: #00ffff;
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 136, 0.1);
+                outline: none;
+            }
+            
+            .input-hacker::placeholder {
+                color: #00ff8866;
+                font-style: italic;
+            }
+            
+            /* Hacker button */
+            .btn-hacker {
+                background: #000000;
+                border: 2px solid #00ff88;
+                color: #00ff88;
+                font-family: 'JetBrains Mono', monospace;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .btn-hacker::before {
+                content: '>';
+                position: absolute;
+                left: 10px;
                 opacity: 0;
+                transition: all 0.3s ease;
             }
-            .slide-up-enter-active, .slide-up-leave-active {
-                transition: all 0.3s ease-out;
+            
+            .btn-hacker:hover {
+                background: #00ff88;
+                color: #000000;
+                box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+                transform: translateX(5px);
             }
-            .slide-up-enter-from, .slide-up-leave-to {
-                transform: translateY(20px);
-                opacity: 0;
+            
+            .btn-hacker:hover::before {
+                opacity: 1;
+                left: 15px;
+            }
+            
+            .btn-hacker:active {
+                transform: translateX(2px);
+            }
+            
+            /* Feature card hacker style */
+            .feature-hacker {
+                background: rgba(0, 0, 0, 0.7);
+                border: 1px solid #00ff88;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .feature-hacker::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+                transition: left 0.5s ease;
+            }
+            
+            .feature-hacker:hover {
+                border-color: #00ffff;
+                box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+                transform: translateY(-5px);
+            }
+            
+            .feature-hacker:hover::before {
+                left: 100%;
+            }
+            
+            /* Terminal prompt style */
+            .terminal-prompt {
+                color: #00ff88;
+                font-weight: 600;
+            }
+            
+            .terminal-prompt::before {
+                content: '$ ';
+                color: #00ffff;
+            }
+            
+            /* Glitch text */
+            .glitch-text {
+                position: relative;
+                color: #00ff88;
+                animation: textGlow 2s ease-in-out infinite;
+            }
+            
+            .glitch-text::before,
+            .glitch-text::after {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            
+            .glitch-text::before {
+                left: 2px;
+                text-shadow: -2px 0 #ff00ff;
+                clip: rect(44px, 450px, 56px, 0);
+                animation: glitch 3s infinite linear alternate-reverse;
+            }
+            
+            .glitch-text::after {
+                left: -2px;
+                text-shadow: 2px 0 #00ffff;
+                clip: rect(44px, 450px, 56px, 0);
+                animation: glitch 2s infinite linear alternate-reverse;
+            }
+            
+            /* Matrix-style background */
+            @keyframes matrix {
+                0% { transform: translateY(-100%); }
+                100% { transform: translateY(100vh); }
             }
         </style>
         
         {% block stylesheets %}{% endblock %}
     </head>
-    <body class="bg-gray-50 min-h-screen">
-        <nav class="bg-white shadow-lg">
+    <body class="min-h-screen relative" style="z-index: 0;">
+        <nav class="hacker-nav sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
+                <div class="flex justify-between h-16 items-center">
                     <div class="flex">
                         <div class="flex-shrink-0 flex items-center">
-                            <a href="{{ path('app_home') }}" class="text-2xl font-bold text-indigo-600">DropCrypt</a>
+                            <a href="{{ path('app_home') }}" class="inline-flex items-center text-2xl font-bold text-00ff88 hover:text-00ffff transition-colors duration-200" style="color: #00ff88;">
+                                <div class="border-2 border-00ff88 p-2 mr-3" style="border-color: #00ff88;">
+                                    <svg class="h-6 w-6" style="color: #00ff88; filter: drop-shadow(0 0 5px #00ff88);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    </svg>
+                                </div>
+                                <span class="glitch-text" data-text="DropCrypt">DropCrypt</span>
+                            </a>
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <a href="{{ path('app_message_new') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
-                            Create Message
+                        <a href="{{ path('app_message_new') }}" class="btn-hacker inline-flex items-center px-4 py-2 text-sm font-semibold focus:outline-none">
+                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            CREATE
                         </a>
                     </div>
                 </div>
             </div>
         </nav>
 
-        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <main class="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8 relative" style="z-index: 2;">
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
-                    <div class="animate__animated animate__fadeIn mb-4 p-4 rounded-md {% if label == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %}">
-                        {{ message }}
+                    <div class="animate__animated animate__fadeIn mb-4 p-4 terminal-card {% if label == 'success' %}border-green-500{% else %}border-red-500{% endif %}" style="{% if label == 'success' %}border-color: #00ff88; color: #00ff88;{% else %}border-color: #ff0040; color: #ff0040;{% endif %}">
+                        <span class="terminal-prompt"></span>{{ message }}
                     </div>
                 {% endfor %}
             {% endfor %}
