@@ -1,0 +1,219 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recover Account - DropCrypt{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center px-4">
+    <div class="max-w-2xl w-full">
+        <div class="glass-card p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-white mb-2">Recover Your Account</h1>
+                <p class="text-gray-300">Use your 24-word recovery phrase to regain access</p>
+            </div>
+
+            <div id="recovery-form" class="space-y-6">
+                <div class="alert-warning mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    <span>Enter your recovery phrase exactly as it was given to you</span>
+                </div>
+
+                <div>
+                    <label for="recovery-phrase" class="block text-sm font-medium text-gray-300 mb-2">
+                        24-Word Recovery Phrase
+                    </label>
+                    <textarea 
+                        id="recovery-phrase" 
+                        rows="4"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono text-sm"
+                        placeholder="word1 word2 word3 ... word24"
+                        required
+                    ></textarea>
+                    <p class="text-xs text-gray-400 mt-1">Separate words with spaces</p>
+                </div>
+
+                <div>
+                    <label for="new-password" class="block text-sm font-medium text-gray-300 mb-2">
+                        New Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="new-password" 
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        placeholder="Enter new password (min 8 characters)"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="confirm-password" class="block text-sm font-medium text-gray-300 mb-2">
+                        Confirm New Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="confirm-password" 
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        placeholder="Confirm new password"
+                        required
+                    >
+                </div>
+
+                <div id="error-message" class="hidden alert-error">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span id="error-text"></span>
+                </div>
+
+                <div id="success-message" class="hidden alert-success">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>Account recovered! Redirecting to dashboard...</span>
+                </div>
+
+                <button id="btn-recover" class="w-full btn-security py-4 text-lg font-semibold">
+                    Recover Account
+                </button>
+
+                <div id="recovery-loader" class="hidden text-center py-4">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+                    <p class="text-white mt-2">Recovering account...</p>
+                </div>
+
+                <div class="text-center space-y-3 pt-4">
+                    <a href="/account/login" class="block text-blue-400 hover:text-blue-300 text-sm">
+                        Back to Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/crypto-helper.js"></script>
+<script>
+(async function() {
+    const btnRecover = document.getElementById('btn-recover');
+    const recoveryPhraseInput = document.getElementById('recovery-phrase');
+    const newPasswordInput = document.getElementById('new-password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const errorMessage = document.getElementById('error-message');
+    const successMessage = document.getElementById('success-message');
+    const errorText = document.getElementById('error-text');
+    const recoveryLoader = document.getElementById('recovery-loader');
+
+    const crypto = new CryptoHelper();
+
+    function showError(message) {
+        errorText.textContent = message;
+        errorMessage.classList.remove('hidden');
+        successMessage.classList.add('hidden');
+    }
+
+    function hideError() {
+        errorMessage.classList.add('hidden');
+    }
+
+    function showSuccess() {
+        successMessage.classList.remove('hidden');
+        errorMessage.classList.add('hidden');
+    }
+
+    btnRecover.addEventListener('click', async () => {
+        hideError();
+        
+        const recoveryPhrase = recoveryPhraseInput.value.trim();
+        const newPassword = newPasswordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        // Validation
+        if (!recoveryPhrase) {
+            showError('Please enter your recovery phrase');
+            return;
+        }
+
+        const words = recoveryPhrase.split(/\s+/);
+        if (words.length !== 24) {
+            showError(`Recovery phrase must be exactly 24 words (you entered ${words.length})`);
+            return;
+        }
+
+        if (!newPassword || newPassword.length < 8) {
+            showError('New password must be at least 8 characters');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            showError('Passwords do not match');
+            return;
+        }
+
+        try {
+            recoveryLoader.classList.remove('hidden');
+            btnRecover.disabled = true;
+
+            // Call recovery API
+            const response = await fetch('/api/accounts/recover', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    recoveryPhrase: recoveryPhrase,
+                    newPassword: newPassword
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Recovery failed');
+            }
+
+            // Clear old keys
+            crypto.clearKeys();
+
+            // Generate new key pair
+            await crypto.generateKeyPair();
+            const privateKey = await crypto.exportPrivateKey();
+            const publicKey = await crypto.exportPublicKey();
+
+            // Encrypt private key with new password
+            const encryptedPrivateKey = await crypto.encryptPrivateKey(privateKey, newPassword);
+            crypto.saveEncryptedPrivateKey(encryptedPrivateKey);
+
+            // Update public key on server
+            await fetch('/api/accounts/finalize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    anonymousId: data.anonymousId,
+                    publicKey: publicKey
+                })
+            });
+
+            // Save session data
+            localStorage.setItem('dropcrypt_session', data.sessionToken);
+            localStorage.setItem('dropcrypt_anonymous_id', data.anonymousId);
+            
+            // Save password to sessionStorage for message decryption
+            sessionStorage.setItem('session_password', newPassword);
+
+            showSuccess();
+
+            // Redirect after 2 seconds
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 2000);
+
+        } catch (error) {
+            console.error('Recovery error:', error);
+            showError(error.message || 'Account recovery failed. Please check your recovery phrase.');
+            recoveryLoader.classList.add('hidden');
+            btnRecover.disabled = false;
+        }
+    });
+})();
+</script>
+{% endblock %}
+

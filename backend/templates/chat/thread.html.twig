@@ -1,0 +1,352 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat - DropCrypt{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex flex-col">
+    <!-- Header -->
+    <nav class="bg-gray-900 bg-opacity-50 backdrop-blur-lg border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="/dashboard" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                    </a>
+                    <div>
+                        <h2 id="contact-name" class="text-lg font-semibold text-white"></h2>
+                        <p id="contact-id" class="text-xs text-gray-400"></p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="btn-contact-info" class="text-gray-400 hover:text-white p-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages Container -->
+    <div class="flex-1 overflow-y-auto px-4 py-6" id="messages-container">
+        <div class="max-w-4xl mx-auto space-y-4" id="messages-list">
+            <!-- Messages will be loaded here -->
+        </div>
+
+        <div id="messages-loader" class="text-center py-8">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+            <p class="text-gray-400 mt-2 text-sm">Loading messages...</p>
+        </div>
+
+        <div id="no-messages" class="hidden text-center py-12 text-gray-400">
+            <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <p class="text-lg">No messages yet</p>
+            <p class="text-sm mt-1">Start the conversation below</p>
+        </div>
+
+        <!-- Decryption error -->
+        <div id="decrypt-error" class="hidden max-w-4xl mx-auto">
+            <div class="alert-error">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <span>Unable to decrypt some messages. This may occur if you're on a different device.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Input -->
+    <div class="bg-gray-900 bg-opacity-50 backdrop-blur-lg border-t border-gray-800 px-4 py-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex items-end space-x-3">
+                <div class="flex-1">
+                    <textarea 
+                        id="message-input" 
+                        rows="1"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
+                        placeholder="Type a message... (Shift+Enter for new line)"
+                        style="max-height: 120px;"
+                    ></textarea>
+                </div>
+                <button 
+                    id="btn-send" 
+                    class="btn-security px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="send-error" class="hidden mt-2 text-red-400 text-sm"></div>
+            
+            <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+                <span>End-to-end encrypted · Messages expire in 24h</span>
+                <span id="char-count">0 / 5000</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/crypto-helper.js"></script>
+<script>
+(async function() {
+    const crypto = new CryptoHelper();
+    const urlPath = window.location.pathname;
+    const otherUserId = urlPath.split('/').pop();
+    
+    // Check authentication
+    const sessionToken = localStorage.getItem('dropcrypt_session');
+    const anonymousId = localStorage.getItem('dropcrypt_anonymous_id');
+    const password = sessionStorage.getItem('session_password'); // For decryption
+
+    if (!sessionToken || !anonymousId) {
+        window.location.href = '/account/login';
+        return;
+    }
+
+    let privateKey = null;
+    let recipientPublicKey = null;
+    let pollingInterval;
+
+    // Load private key
+    async function loadPrivateKey() {
+        try {
+            const encryptedKey = crypto.loadEncryptedPrivateKey();
+            if (!encryptedKey) {
+                console.warn('No private key found in storage - this is normal on first login from a new device');
+                document.getElementById('decrypt-error').classList.remove('hidden');
+                return null;
+            }
+
+            // Try to use cached password from session
+            let pwd = password;
+            if (!pwd) {
+                // Prompt for password
+                pwd = prompt('Enter your password to decrypt messages:');
+                if (pwd) {
+                    try {
+                        // Test if password is correct
+                        const testKey = await crypto.getPrivateKey(pwd);
+                        sessionStorage.setItem('session_password', pwd);
+                        return testKey;
+                    } catch (e) {
+                        alert('Incorrect password. Messages cannot be decrypted.');
+                        document.getElementById('decrypt-error').classList.remove('hidden');
+                        return null;
+                    }
+                } else {
+                    // User cancelled
+                    document.getElementById('decrypt-error').classList.remove('hidden');
+                    return null;
+                }
+            }
+
+            return await crypto.getPrivateKey(pwd);
+        } catch (error) {
+            console.error('Failed to load private key:', error);
+            document.getElementById('decrypt-error').classList.remove('hidden');
+            return null;
+        }
+    }
+
+    // Load recipient info
+    async function loadRecipientInfo() {
+        try {
+            const response = await fetch(`/api/users/${otherUserId}/public-key`, {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+
+            if (!response.ok) throw new Error('User not found');
+
+            const data = await response.json();
+            recipientPublicKey = data.publicKey;
+
+            // Try to get contact info for nickname
+            const contactResponse = await fetch('/api/contacts', {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+
+            if (contactResponse.ok) {
+                const contacts = await contactResponse.json();
+                const contact = contacts.contacts.find(c => c.userId === otherUserId);
+                
+                document.getElementById('contact-name').textContent = contact?.nickname || otherUserId;
+            } else {
+                document.getElementById('contact-name').textContent = otherUserId;
+            }
+
+            document.getElementById('contact-id').textContent = otherUserId;
+        } catch (error) {
+            console.error('Failed to load recipient info:', error);
+            alert('User not found');
+            window.location.href = '/dashboard';
+        }
+    }
+
+    // Load and decrypt messages
+    async function loadMessages() {
+        try {
+            const response = await fetch(`/api/direct-messages/thread/${otherUserId}`, {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+
+            if (!response.ok) throw new Error('Failed to load messages');
+
+            const data = await response.json();
+            const messagesList = document.getElementById('messages-list');
+            const messagesLoader = document.getElementById('messages-loader');
+            const noMessages = document.getElementById('no-messages');
+
+            messagesLoader.classList.add('hidden');
+
+            if (data.messages.length === 0) {
+                noMessages.classList.remove('hidden');
+                return;
+            }
+
+            noMessages.classList.add('hidden');
+
+            // Decrypt and display messages
+            const decryptedMessages = [];
+
+            for (const msg of data.messages.reverse()) {
+                let content = '[Encrypted]';
+                
+                try {
+                    if (!msg.isSender && privateKey && msg.encryptedKey) {
+                        // Decrypt received message
+                        content = await crypto.decryptMessageComplete(
+                            msg.encryptedContent,
+                            msg.encryptedKey,
+                            privateKey
+                        );
+                    } else if (msg.isSender) {
+                        // For sent messages, show encrypted indicator
+                        content = '[Sent - Encrypted]';
+                    }
+                } catch (error) {
+                    console.error('Decryption failed:', error);
+                    content = '[Failed to decrypt]';
+                }
+
+                decryptedMessages.push({...msg, decrypted: content});
+
+                // Mark as read if it's a received message
+                if (!msg.isSender && !msg.isRead) {
+                    fetch(`/api/direct-messages/${msg.messageId}/read`, {
+                        method: 'PUT',
+                        headers: { 'Authorization': 'Bearer ' + sessionToken }
+                    });
+                }
+            }
+
+            messagesList.innerHTML = decryptedMessages.map(msg => `
+                <div class="flex ${msg.isSender ? 'justify-end' : 'justify-start'}">
+                    <div class="max-w-md ${msg.isSender ? 'bg-blue-600' : 'bg-gray-800'} rounded-lg px-4 py-3">
+                        <p class="text-white break-words">${msg.decrypted}</p>
+                        <div class="flex items-center justify-between mt-1 space-x-3">
+                            <span class="text-xs ${msg.isSender ? 'text-blue-200' : 'text-gray-400'}">
+                                ${new Date(msg.sentAt).toLocaleTimeString()}
+                            </span>
+                            ${msg.isSender && msg.isRead ? '<span class="text-xs text-blue-200">✓✓ Read</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Scroll to bottom
+            const container = document.getElementById('messages-container');
+            container.scrollTop = container.scrollHeight;
+        } catch (error) {
+            console.error('Failed to load messages:', error);
+        }
+    }
+
+    // Send message
+    const messageInput = document.getElementById('message-input');
+    const btnSend = document.getElementById('btn-send');
+    const charCount = document.getElementById('char-count');
+    const sendError = document.getElementById('send-error');
+
+    messageInput.addEventListener('input', () => {
+        const length = messageInput.value.length;
+        charCount.textContent = `${length} / 5000`;
+        btnSend.disabled = length === 0 || length > 5000;
+        
+        // Auto-resize textarea
+        messageInput.style.height = 'auto';
+        messageInput.style.height = messageInput.scrollHeight + 'px';
+    });
+
+    messageInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            btnSend.click();
+        }
+    });
+
+    btnSend.addEventListener('click', async () => {
+        const content = messageInput.value.trim();
+        if (!content || !recipientPublicKey) return;
+
+        try {
+            btnSend.disabled = true;
+            sendError.classList.add('hidden');
+
+            // Encrypt message
+            const encrypted = await crypto.encryptMessageComplete(content, recipientPublicKey);
+
+            // Send message
+            const response = await fetch('/api/direct-messages', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + sessionToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    recipientId: otherUserId,
+                    encryptedContent: encrypted.encryptedContent,
+                    encryptedKey: encrypted.encryptedKey
+                })
+            });
+
+            if (!response.ok) throw new Error('Failed to send message');
+
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+            charCount.textContent = '0 / 5000';
+            
+            // Reload messages
+            await loadMessages();
+        } catch (error) {
+            console.error('Send error:', error);
+            sendError.textContent = error.message;
+            sendError.classList.remove('hidden');
+        } finally {
+            btnSend.disabled = messageInput.value.length === 0;
+        }
+    });
+
+    // Contact info modal
+    document.getElementById('btn-contact-info').addEventListener('click', () => {
+        alert(`Anonymous ID: ${otherUserId}\n\nYou can add this user to your contacts for a custom nickname.`);
+    });
+
+    // Initialize
+    privateKey = await loadPrivateKey();
+    await loadRecipientInfo();
+    await loadMessages();
+
+    // Poll for new messages every 3 seconds
+    pollingInterval = setInterval(loadMessages, 3000);
+})();
+</script>
+{% endblock %}
+
