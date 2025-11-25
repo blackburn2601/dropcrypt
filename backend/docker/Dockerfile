@@ -33,8 +33,13 @@ RUN composer update --no-interaction --no-scripts && \
 # Set permissions
 RUN chown -R www-data:www-data /var/www
 
+# Copy the entrypoint script
+COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+RUN chmod +x /usr/local/bin/docker-entrypoint
+
 # Expose port 9000
 EXPOSE 9000
 
-# Start PHP-FPM
-CMD ["php-fpm"] 
+# Use entrypoint to handle composer install on startup
+ENTRYPOINT ["docker-entrypoint"]
+CMD ["php-fpm", "-F"] 
