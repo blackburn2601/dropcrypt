@@ -1,6 +1,15 @@
 #!/bin/sh
 set -e
 
+# Install/update Composer dependencies if vendor directory is missing or incomplete
+if [ ! -f "vendor/autoload.php" ]; then
+  echo "Installing Composer dependencies..."
+  composer install --no-interaction --prefer-dist --optimize-autoloader
+  
+  # Fix permissions for the symfony user
+  chown -R symfony:symfony /var/www/vendor
+fi
+
 # Wait for the database to be ready
 until php bin/console doctrine:query:sql "SELECT 1" > /dev/null 2>&1; do
   echo "Waiting for database to be ready..."
