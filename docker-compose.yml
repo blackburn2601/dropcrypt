@@ -13,8 +13,8 @@ services:
 
   php:
     build:
-      context: ./backend
-      dockerfile: docker/Dockerfile
+      context: .
+      dockerfile: docker/php/Dockerfile
     volumes:
       - ./backend:/var/www
     environment:
