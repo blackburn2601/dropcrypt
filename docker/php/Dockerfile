@@ -18,13 +18,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www
 
 # Copy composer files first
-COPY composer.json composer.lock* ./
+COPY backend/composer.json backend/composer.lock* ./
 
 # Install dependencies
 RUN composer install --no-interaction --no-scripts
 
 # Copy project files
-COPY . .
+COPY backend/ .
 
 # Update dependencies and optimize autoloader
 RUN composer update --no-interaction --no-scripts && \
@@ -34,7 +34,7 @@ RUN composer update --no-interaction --no-scripts && \
 RUN chown -R www-data:www-data /var/www
 
 # Copy the entrypoint script
-COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
 
 # Expose port 9000
