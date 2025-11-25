@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/message')]
+#[Route('')]
 class MessageController extends AbstractController
 {
     public function __construct(
@@ -21,8 +21,8 @@ class MessageController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'app_message_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    #[Route('/messages/create', name: 'app_messages_create_form', methods: ['GET', 'POST'])]
+    public function create(Request $request): Response
     {
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message);
@@ -32,7 +32,7 @@ class MessageController extends AbstractController
             $this->entityManager->persist($message);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_message_show', ['accessToken' => $message->getAccessToken()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_messages_view', ['accessToken' => $message->getAccessToken()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('message/create.html.twig', [
@@ -41,8 +41,8 @@ class MessageController extends AbstractController
         ]);
     }
 
-    #[Route('/{accessToken}', name: 'app_message_show', methods: ['GET'])]
-    public function show(string $accessToken): Response
+    #[Route('/messages/view/{accessToken}', name: 'app_messages_view', methods: ['GET'])]
+    public function view(string $accessToken): Response
     {
         $message = $this->messageRepository->findOneBy(['accessToken' => $accessToken]);
         
@@ -53,7 +53,7 @@ class MessageController extends AbstractController
         ]);
     }
 
-    #[Route('/api/create', name: 'app_message_api_create', methods: ['POST'])]
+    #[Route('/api/messages', name: 'api_messages_create', methods: ['POST'])]
     public function apiCreate(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -77,7 +77,7 @@ class MessageController extends AbstractController
         ]);
     }
 
-    #[Route('/api/{accessToken}', name: 'app_message_api_show', methods: ['GET'])]
+    #[Route('/api/messages/{accessToken}', name: 'api_messages_show', methods: ['GET'])]
     public function apiShow(string $accessToken, Request $request): JsonResponse
     {
         $message = $this->messageRepository->findOneBy(['accessToken' => $accessToken]);
@@ -109,7 +109,7 @@ class MessageController extends AbstractController
         ]);
     }
 
-    #[Route('/api/{accessToken}', name: 'app_message_api_delete', methods: ['DELETE'])]
+    #[Route('/api/messages/{accessToken}', name: 'api_messages_delete', methods: ['DELETE'])]
     public function apiDelete(string $accessToken, Request $request): JsonResponse
     {
         $message = $this->messageRepository->findOneBy(['accessToken' => $accessToken]);

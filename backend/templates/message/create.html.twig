@@ -184,7 +184,7 @@ document.getElementById('messageForm').addEventListener('submit', async (e) => {
         const expiresAt = new Date(Date.now() + expirationSeconds * 1000).toISOString();
 
         // Send to backend
-        const response = await fetch('/message/api/create', {
+        const response = await fetch('/api/messages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -211,7 +211,7 @@ document.getElementById('messageForm').addEventListener('submit', async (e) => {
             formContainer.style.display = 'none';
             
             // Show success message with link
-            const messageLink = `${window.location.origin}/message/${data.accessToken}?key=${encodeURIComponent(keyString)}`;
+            const messageLink = `${window.location.origin}/messages/view/${data.accessToken}?key=${encodeURIComponent(keyString)}`;
             document.getElementById('messageLink').value = messageLink;
             const resultDiv = document.getElementById('result');
             resultDiv.classList.remove('hidden');

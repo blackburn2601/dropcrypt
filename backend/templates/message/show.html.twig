@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Fetch the message
         const accessToken = '{{ accessToken }}';
-        const response = await fetch(`/message/api/${accessToken}?keyHash=${encodeURIComponent(keyHash)}`);
+        const response = await fetch(`/api/messages/${accessToken}?keyHash=${encodeURIComponent(keyHash)}`);
         const data = await response.json();
 
         if (!response.ok) {
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Delete the message from the server after displaying it
         try {
-            await fetch(`/message/api/${accessToken}?keyHash=${encodeURIComponent(keyHash)}`, {
+            await fetch(`/api/messages/${accessToken}?keyHash=${encodeURIComponent(keyHash)}`, {
                 method: 'DELETE'
             });
             // Message deleted successfully (silently handle - message is already displayed)
