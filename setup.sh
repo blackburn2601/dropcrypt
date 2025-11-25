@@ -22,13 +22,20 @@ fi
 
 echo -e "${GREEN}✓${NC} Docker is running"
 
-# Check if docker compose is available
-if ! docker compose version > /dev/null 2>&1; then
-    echo -e "${RED}Error: docker compose is not available!${NC}"
+# Check for docker compose (new) or docker-compose (old)
+DOCKER_COMPOSE=""
+if docker compose version > /dev/null 2>&1; then
+    DOCKER_COMPOSE="docker compose"
+    echo -e "${GREEN}✓${NC} Docker Compose (v2) is available"
+elif docker-compose version > /dev/null 2>&1; then
+    DOCKER_COMPOSE="docker-compose"
+    echo -e "${GREEN}✓${NC} Docker Compose (v1) is available"
+else
+    echo -e "${RED}Error: Neither 'docker compose' nor 'docker-compose' is available!${NC}"
+    echo -e "${YELLOW}Please install Docker Compose and try again.${NC}"
     exit 1
 fi
 
-echo -e "${GREEN}✓${NC} Docker Compose is available"
 echo ""
 
 # ============================================
@@ -110,8 +117,8 @@ echo -e "  ${GREEN}✓${NC} Secure keys generated and saved"
 echo ""
 echo -e "${BLUE}[3/6] Stopping existing containers...${NC}"
 
-if [ "$(docker compose ps -q)" ]; then
-    docker compose down -v > /dev/null 2>&1
+if [ "$($DOCKER_COMPOSE ps -q)" ]; then
+    $DOCKER_COMPOSE down -v > /dev/null 2>&1
     echo -e "  ${GREEN}✓${NC} Existing containers stopped"
 else
     echo -e "  ${YELLOW}→${NC} No containers to stop"
@@ -124,7 +131,7 @@ echo ""
 echo -e "${BLUE}[4/6] Building and starting Docker containers...${NC}"
 echo -e "  ${YELLOW}→${NC} This may take a few minutes on first run..."
 
-docker compose up -d --build
+$DOCKER_COMPOSE up -d --build
 
 echo -e "  ${GREEN}✓${NC} Containers started"
 
@@ -140,7 +147,7 @@ RETRY_COUNT=0
 MAX_RETRIES=30
 
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-    if docker compose exec -T mysql mysqladmin ping -h localhost -u root -p$(grep DB_ROOT_PASSWORD .env | cut -d '=' -f2) --silent 2>/dev/null; then
+    if $DOCKER_COMPOSE exec -T mysql mysqladmin ping -h localhost -u root -p$(grep DB_ROOT_PASSWORD .env | cut -d '=' -f2) --silent 2>/dev/null; then
         echo -e "  ${GREEN}✓${NC} MySQL is ready"
         break
     fi
@@ -166,7 +173,7 @@ echo -e "${BLUE}[6/6] Setting up database...${NC}"
 
 # Run migrations
 echo -e "  ${YELLOW}→${NC} Running database migrations..."
-if docker compose exec -T php php bin/console doctrine:migrations:migrate --no-interaction --env=dev; then
+if $DOCKER_COMPOSE exec -T php php bin/console doctrine:migrations:migrate --no-interaction --env=dev; then
     echo -e "  ${GREEN}✓${NC} Database migrations completed"
 else
     echo -e "  ${YELLOW}⚠${NC}  No migrations to run or migrations failed (this might be okay)"
@@ -179,11 +186,11 @@ echo ""
 echo -e "${BLUE}Verifying installation...${NC}"
 
 # Check containers
-if [ "$(docker compose ps --filter 'status=running' -q | wc -l)" -ge 3 ]; then
+if [ "$($DOCKER_COMPOSE ps --filter 'status=running' -q | wc -l)" -ge 3 ]; then
     echo -e "  ${GREEN}✓${NC} All containers are running"
 else
     echo -e "  ${YELLOW}⚠${NC}  Some containers may not be running"
-    docker compose ps
+    $DOCKER_COMPOSE ps
 fi
 
 # ============================================
@@ -199,13 +206,13 @@ echo -e "  • Frontend/API: ${GREEN}http://localhost${NC}"
 echo -e "  • MySQL Port:   ${GREEN}3307${NC}"
 echo ""
 echo -e "${BLUE}Container Status:${NC}"
-docker compose ps
+$DOCKER_COMPOSE ps
 echo ""
 echo -e "${BLUE}Useful Commands:${NC}"
-echo -e "  • View logs:        ${YELLOW}docker compose logs -f${NC}"
-echo -e "  • Stop containers:  ${YELLOW}docker compose down${NC}"
-echo -e "  • Start containers: ${YELLOW}docker compose up -d${NC}"
-echo -e "  • Enter PHP shell:  ${YELLOW}docker compose exec php sh${NC}"
+echo -e "  • View logs:        ${YELLOW}$DOCKER_COMPOSE logs -f${NC}"
+echo -e "  • Stop containers:  ${YELLOW}$DOCKER_COMPOSE down${NC}"
+echo -e "  • Start containers: ${YELLOW}$DOCKER_COMPOSE up -d${NC}"
+echo -e "  • Enter PHP shell:  ${YELLOW}$DOCKER_COMPOSE exec php sh${NC}"
 echo ""
 echo -e "${BLUE}Next Steps:${NC}"
 echo -e "  1. Open ${GREEN}http://localhost${NC} in your browser"
