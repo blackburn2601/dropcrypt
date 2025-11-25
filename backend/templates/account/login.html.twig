@@ -1,0 +1,199 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login - DropCrypt{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center px-4">
+    <div class="max-w-md w-full">
+        <div class="glass-card p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+                <p class="text-gray-300">Login to your anonymous account</p>
+            </div>
+
+            <div id="login-form" class="space-y-6">
+                <div class="alert-info mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                    <span>Zero-knowledge authentication - we never see your password</span>
+                </div>
+
+                <div>
+                    <label for="anonymous-id" class="block text-sm font-medium text-gray-300 mb-2">
+                        Anonymous ID
+                    </label>
+                    <input 
+                        type="text" 
+                        id="anonymous-id" 
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        placeholder="usr_xxxxxxxxxxxxxxxx"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+                        Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <div id="error-message" class="hidden alert-error">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span id="error-text"></span>
+                </div>
+
+                <button id="btn-login" class="w-full btn-security py-4 text-lg font-semibold">
+                    Login
+                </button>
+
+                <div id="login-loader" class="hidden text-center py-4">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+                    <p class="text-white mt-2">Authenticating...</p>
+                </div>
+
+                <div class="text-center space-y-3 pt-4">
+                    <a href="/account/recover" class="block text-blue-400 hover:text-blue-300 text-sm">
+                        Forgot your password? Use recovery phrase
+                    </a>
+                    <div class="text-gray-400 text-sm">
+                        Don't have an account? 
+                        <a href="/account/create" class="text-blue-400 hover:text-blue-300 font-medium">Create one</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/crypto-helper.js"></script>
+<script>
+(async function() {
+    const btnLogin = document.getElementById('btn-login');
+    const anonymousIdInput = document.getElementById('anonymous-id');
+    const passwordInput = document.getElementById('password');
+    const errorMessage = document.getElementById('error-message');
+    const errorText = document.getElementById('error-text');
+    const loginLoader = document.getElementById('login-loader');
+    const loginForm = document.getElementById('login-form');
+
+    const crypto = new CryptoHelper();
+
+    // Check if already logged in
+    const existingSession = localStorage.getItem('dropcrypt_session');
+    if (existingSession) {
+        window.location.href = '/dashboard';
+        return;
+    }
+
+    function showError(message) {
+        errorText.textContent = message;
+        errorMessage.classList.remove('hidden');
+    }
+
+    function hideError() {
+        errorMessage.classList.add('hidden');
+    }
+
+    btnLogin.addEventListener('click', async () => {
+        hideError();
+        
+        const anonymousId = anonymousIdInput.value.trim();
+        const password = passwordInput.value;
+
+        if (!anonymousId || !password) {
+            showError('Please enter both Anonymous ID and password');
+            return;
+        }
+
+        if (!anonymousId.startsWith('usr_')) {
+            showError('Invalid Anonymous ID format');
+            return;
+        }
+
+        try {
+            loginLoader.classList.remove('hidden');
+            btnLogin.disabled = true;
+
+            // Call login API
+            const response = await fetch('/api/accounts/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    anonymousId: anonymousId,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Login failed');
+            }
+
+            // Check if private key exists in localStorage
+            let encryptedPrivateKey = crypto.loadEncryptedPrivateKey();
+            
+            if (!encryptedPrivateKey) {
+                // If not found, try to decrypt with password to generate it
+                // (This would be for first-time login on this device)
+                // For now, we'll generate a new key pair
+                await crypto.generateKeyPair();
+                const privateKey = await crypto.exportPrivateKey();
+                encryptedPrivateKey = await crypto.encryptPrivateKey(privateKey, password);
+                crypto.saveEncryptedPrivateKey(encryptedPrivateKey);
+            } else {
+                // Verify password can decrypt the private key
+                try {
+                    await crypto.decryptPrivateKey(encryptedPrivateKey, password);
+                } catch (e) {
+                    // Wrong password or corrupted key
+                    crypto.clearKeys();
+                    throw new Error('Cannot decrypt private key. Password may be incorrect.');
+                }
+            }
+
+            // Save session data
+            localStorage.setItem('dropcrypt_session', data.sessionToken);
+            localStorage.setItem('dropcrypt_anonymous_id', data.anonymousId);
+            localStorage.setItem('dropcrypt_public_key', data.publicKey);
+            
+            // Save password to sessionStorage for message decryption
+            sessionStorage.setItem('session_password', password);
+
+            // Redirect to dashboard
+            window.location.href = '/dashboard';
+
+        } catch (error) {
+            console.error('Login error:', error);
+            showError(error.message || 'Login failed. Please check your credentials.');
+            loginLoader.classList.add('hidden');
+            btnLogin.disabled = false;
+        }
+    });
+
+    // Enter key to submit
+    passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            btnLogin.click();
+        }
+    });
+
+    anonymousIdInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            passwordInput.focus();
+        }
+    });
+})();
+</script>
+{% endblock %}
+

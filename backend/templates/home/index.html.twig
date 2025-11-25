@@ -148,17 +148,61 @@
         </div>
     </div>
 
-    <!-- CTA Section -->
+    <!-- CTA Section - Anonymous Messaging -->
     <div class="py-12 sm:py-20 text-center px-4" style="background: rgba(20, 20, 20, 0.7); border-top: 1px solid rgba(37, 99, 235, 0.1);">
-        <div class="security-card p-6 sm:p-12 max-w-3xl mx-auto">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4" style="color: #f1f5f9;">Ready to Send Secure Messages?</h2>
-            <p class="text-base sm:text-lg mb-6 sm:mb-8" style="color: #cbd5e1;">Start protecting your sensitive information today. No account required, completely free.</p>
-            <a href="{{ path('app_messages_create_form') }}" class="btn-security inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold focus:outline-none">
-                <svg class="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-                Create Secure Message
-                <svg class="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="security-card p-6 sm:p-12 max-w-4xl mx-auto">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4" style="color: #f1f5f9;">Anonymous Encrypted Messaging</h2>
+            <p class="text-base sm:text-lg mb-6 sm:mb-8" style="color: #cbd5e1;">
+                Create an anonymous account and start sending end-to-end encrypted messages. 
+                Zero-knowledge architecture means we never see your messages or personal data.
+            </p>
+            
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                <a href="/account/create" class="btn-security inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold focus:outline-none w-full sm:w-auto justify-center">
+                    <svg class="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                    </svg>
+                    Create Anonymous Account
+                </a>
+                
+                <a href="/account/login" class="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold focus:outline-none w-full sm:w-auto justify-center bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all duration-200 border border-gray-600">
+                    <svg class="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                    </svg>
+                    Login to Existing Account
+                </a>
+            </div>
+
+            <!-- Features -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm" style="color: #94a3b8;">
+                <div class="flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    No Email Required
+                </div>
+                <div class="flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                    RSA-4096 + AES-256
+                </div>
+                <div class="flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    24h Message Expiry
+                </div>
+            </div>
+        </div>
+
+        <!-- Legacy Message Feature -->
+        <div class="mt-8 pt-8 border-t border-gray-700">
+            <p class="text-sm text-gray-400 mb-4">Looking for one-time message sharing?</p>
+            <a href="{{ path('app_messages_create_form') }}" class="inline-flex items-center px-4 py-2 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+                Create One-Time Secure Message
+                <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                 </svg>
             </a>

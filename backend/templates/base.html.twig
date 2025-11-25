@@ -447,18 +447,27 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <div class="hidden md:flex items-center gap-2 text-sm" style="color: #cbd5e1;">
+                    <div class="flex items-center gap-2 sm:gap-4">
+                        <div class="hidden lg:flex items-center gap-2 text-sm" style="color: #cbd5e1;">
                             <svg class="h-4 w-4" style="color: #34d399;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
                             <span>End-to-End Encrypted</span>
                         </div>
-                        <a href="{{ path('app_messages_create_form') }}" class="btn-security inline-flex items-center px-5 py-2.5 text-sm font-semibold focus:outline-none">
-                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        
+                        <a href="/account/login" class="hidden sm:inline-flex items-center px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                            <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
                             </svg>
-                            New Message
+                            Login
+                        </a>
+                        
+                        <a href="/account/create" class="btn-security inline-flex items-center px-4 sm:px-5 py-2 sm:py-2.5 text-sm font-semibold focus:outline-none">
+                            <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                            </svg>
+                            <span class="hidden sm:inline">Create Account</span>
+                            <span class="sm:hidden">Sign Up</span>
                         </a>
                     </div>
                 </div>

@@ -1,0 +1,377 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard - DropCrypt{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+    <!-- Header -->
+    <nav class="bg-gray-900 bg-opacity-50 backdrop-blur-lg border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-xl font-bold text-white">DropCrypt</h1>
+                    <span class="text-sm text-gray-400" id="user-id"></span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="btn-contacts" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                    <button id="btn-settings" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </button>
+                    <button id="btn-logout" class="text-red-400 hover:text-red-300 px-3 py-2 rounded-md text-sm font-medium">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Sidebar - Threads List -->
+            <div class="lg:col-span-1">
+                <div class="glass-card p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-white">Messages</h2>
+                        <span id="unread-badge" class="hidden bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full"></span>
+                    </div>
+
+                    <button id="btn-new-message" class="w-full btn-security py-3 mb-4">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        New Message
+                    </button>
+
+                    <div id="threads-list" class="space-y-2">
+                        <!-- Threads will be loaded here -->
+                    </div>
+
+                    <div id="threads-loader" class="text-center py-8">
+                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+                        <p class="text-gray-400 mt-2 text-sm">Loading conversations...</p>
+                    </div>
+
+                    <div id="no-threads" class="hidden text-center py-8 text-gray-400">
+                        <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                        <p>No conversations yet</p>
+                        <p class="text-sm mt-1">Start a new message</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content - Welcome / Instructions -->
+            <div class="lg:col-span-2">
+                <div class="glass-card p-8">
+                    <div class="text-center py-12">
+                        <svg class="w-20 h-20 mx-auto mb-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                        <h2 class="text-2xl font-bold text-white mb-4">Welcome to DropCrypt</h2>
+                        <p class="text-gray-300 mb-6 max-w-lg mx-auto">
+                            Your anonymous, end-to-end encrypted messaging platform. 
+                            Messages expire in 24 hours and are encrypted on your device.
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                            <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                                <svg class="w-8 h-8 mx-auto mb-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                                <h3 class="text-white font-semibold mb-1">Zero-Knowledge</h3>
+                                <p class="text-gray-400 text-sm">We never see your messages</p>
+                            </div>
+
+                            <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                                <svg class="w-8 h-8 mx-auto mb-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                                <h3 class="text-white font-semibold mb-1">End-to-End Encrypted</h3>
+                                <p class="text-gray-400 text-sm">RSA-4096 + AES-256-GCM</p>
+                            </div>
+
+                            <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                                <svg class="w-8 h-8 mx-auto mb-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <h3 class="text-white font-semibold mb-1">Self-Destructing</h3>
+                                <p class="text-gray-400 text-sm">Messages expire in 24h</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-8">
+                            <p class="text-gray-400 text-sm mb-4">Your Anonymous ID:</p>
+                            <div class="bg-gray-800 bg-opacity-50 px-4 py-3 rounded-lg inline-block">
+                                <code id="display-user-id" class="text-blue-300 font-mono text-sm"></code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Stats -->
+                <div class="grid grid-cols-2 gap-4 mt-6">
+                    <div class="glass-card p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Messages Sent</p>
+                                <p id="stats-sent" class="text-2xl font-bold text-white">-</p>
+                            </div>
+                            <svg class="w-10 h-10 text-blue-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Messages Received</p>
+                                <p id="stats-received" class="text-2xl font-bold text-white">-</p>
+                            </div>
+                            <svg class="w-10 h-10 text-green-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Message Modal -->
+    <div id="new-message-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 px-4">
+        <div class="glass-card p-8 max-w-md w-full">
+            <h3 class="text-2xl font-bold text-white mb-6">New Message</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Recipient ID</label>
+                    <input 
+                        type="text" 
+                        id="recipient-id" 
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white"
+                        placeholder="usr_xxxxxxxxxxxxxxxx"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Message</label>
+                    <textarea 
+                        id="message-content" 
+                        rows="4"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white"
+                        placeholder="Type your message..."
+                    ></textarea>
+                </div>
+
+                <div id="send-error" class="hidden alert-error text-sm"></div>
+
+                <div class="flex space-x-3">
+                    <button id="btn-send-message" class="flex-1 btn-security py-3">Send</button>
+                    <button id="btn-cancel-message" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/crypto-helper.js"></script>
+<script>
+(async function() {
+    const crypto = new CryptoHelper();
+    let pollingInterval;
+    let lastPollTime = new Date().toISOString();
+
+    // Check authentication
+    const sessionToken = localStorage.getItem('dropcrypt_session');
+    const anonymousId = localStorage.getItem('dropcrypt_anonymous_id');
+
+    if (!sessionToken || !anonymousId) {
+        window.location.href = '/account/login';
+        return;
+    }
+
+    // Display user ID
+    document.getElementById('user-id').textContent = anonymousId;
+    document.getElementById('display-user-id').textContent = anonymousId;
+
+    // Load user stats
+    async function loadUserStats() {
+        try {
+            const response = await fetch('/api/accounts/me', {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+
+            if (!response.ok) throw new Error('Unauthorized');
+
+            const data = await response.json();
+            document.getElementById('stats-sent').textContent = data.messagesSent;
+            document.getElementById('stats-received').textContent = data.messagesReceived;
+        } catch (error) {
+            console.error('Failed to load stats:', error);
+        }
+    }
+
+    // Load threads
+    async function loadThreads() {
+        try {
+            const response = await fetch('/api/direct-messages/threads', {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+
+            if (!response.ok) throw new Error('Failed to load threads');
+
+            const data = await response.json();
+            const threadsList = document.getElementById('threads-list');
+            const threadsLoader = document.getElementById('threads-loader');
+            const noThreads = document.getElementById('no-threads');
+
+            threadsLoader.classList.add('hidden');
+
+            if (data.threads.length === 0) {
+                noThreads.classList.remove('hidden');
+                return;
+            }
+
+            noThreads.classList.add('hidden');
+            threadsList.innerHTML = data.threads.map(thread => `
+                <a href="/chat/thread/${thread.userId}" class="block bg-gray-800 bg-opacity-50 hover:bg-opacity-70 rounded-lg p-4 transition">
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="text-white font-medium">${thread.nickname || thread.userId}</span>
+                        ${thread.unreadCount > 0 ? `<span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">${thread.unreadCount}</span>` : ''}
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400 text-sm">${thread.totalMessages} messages</span>
+                        <span class="text-gray-500 text-xs">${new Date(thread.lastMessageAt).toLocaleDateString()}</span>
+                    </div>
+                </a>
+            `).join('');
+
+            // Update unread badge
+            const totalUnread = data.threads.reduce((sum, t) => sum + t.unreadCount, 0);
+            const unreadBadge = document.getElementById('unread-badge');
+            if (totalUnread > 0) {
+                unreadBadge.textContent = totalUnread;
+                unreadBadge.classList.remove('hidden');
+            }
+        } catch (error) {
+            console.error('Failed to load threads:', error);
+        }
+    }
+
+    // Polling for new messages
+    async function pollForNewMessages() {
+        try {
+            const response = await fetch(`/api/direct-messages/poll?since=${encodeURIComponent(lastPollTime)}`, {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+
+            if (!response.ok) return;
+
+            const data = await response.json();
+            lastPollTime = data.timestamp;
+
+            if (data.newMessages.length > 0) {
+                loadThreads(); // Reload threads
+                loadUserStats(); // Update stats
+            }
+        } catch (error) {
+            console.error('Polling error:', error);
+        }
+    }
+
+    // New message modal
+    const modal = document.getElementById('new-message-modal');
+    document.getElementById('btn-new-message').addEventListener('click', () => {
+        modal.classList.remove('hidden');
+    });
+
+    document.getElementById('btn-cancel-message').addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+    document.getElementById('btn-send-message').addEventListener('click', async () => {
+        const recipientId = document.getElementById('recipient-id').value.trim();
+        const messageContent = document.getElementById('message-content').value.trim();
+
+        if (!recipientId || !messageContent) return;
+
+        try {
+            // Get recipient's public key
+            const keyResponse = await fetch(`/api/users/${recipientId}/public-key`, {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+
+            if (!keyResponse.ok) throw new Error('Recipient not found');
+
+            const keyData = await keyResponse.json();
+
+            // Encrypt message
+            const encrypted = await crypto.encryptMessageComplete(messageContent, keyData.publicKey);
+
+            // Send message
+            const sendResponse = await fetch('/api/direct-messages', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + sessionToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    recipientId: recipientId,
+                    encryptedContent: encrypted.encryptedContent,
+                    encryptedKey: encrypted.encryptedKey
+                })
+            });
+
+            if (!sendResponse.ok) throw new Error('Failed to send');
+
+            modal.classList.add('hidden');
+            document.getElementById('recipient-id').value = '';
+            document.getElementById('message-content').value = '';
+            loadThreads();
+            loadUserStats();
+        } catch (error) {
+            document.getElementById('send-error').textContent = error.message;
+            document.getElementById('send-error').classList.remove('hidden');
+        }
+    });
+
+    // Logout
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+        await fetch('/api/accounts/logout', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + sessionToken }
+        });
+
+        crypto.clearKeys();
+        sessionStorage.removeItem('session_password');
+        window.location.href = '/account/login';
+    });
+
+    // Navigation buttons
+    document.getElementById('btn-settings').addEventListener('click', () => {
+        window.location.href = '/account/settings';
+    });
+
+    document.getElementById('btn-contacts').addEventListener('click', () => {
+        window.location.href = '/contacts';
+    });
+
+    // Initial load
+    loadUserStats();
+    loadThreads();
+
+    // Start polling every 5 seconds
+    pollingInterval = setInterval(pollForNewMessages, 5000);
+})();
+</script>
+{% endblock %}
+
