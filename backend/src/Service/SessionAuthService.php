@@ -23,6 +23,8 @@ class SessionAuthService
         $authHeader = $request->headers->get('Authorization');
         
         if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
+            // Debug: No auth header
+            // dump('No Authorization header found');
             return null;
         }
         
@@ -31,8 +33,13 @@ class SessionAuthService
         $session = $this->sessionRepository->findByToken($token);
         
         if (!$session) {
+            // Debug: Invalid/expired token
+            // dump('Session not found for token: ' . substr($token, 0, 20) . '...');
             return null;
         }
+        
+        // Debug: Session found
+        // dump('Authenticated user: ' . $session->getUserId());
         
         return $this->userRepository->findByAnonymousId($session->getUserId());
     }

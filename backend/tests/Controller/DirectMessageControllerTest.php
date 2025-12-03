@@ -359,3 +359,4 @@ class DirectMessageControllerTest extends WebTestCase
     }
 }
 
+

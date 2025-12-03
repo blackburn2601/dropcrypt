@@ -27,7 +27,10 @@ class DirectMessage
     private string $encryptedContent;
 
     #[ORM\Column(type: 'text')]
-    private string $encryptedKey;
+    private string $encryptedKeyForRecipient;
+
+    #[ORM\Column(type: 'text')]
+    private string $encryptedKeyForSender;
 
     #[ORM\Column(type: 'datetime')]
     private \DateTime $createdAt;
@@ -40,9 +43,6 @@ class DirectMessage
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTime $readAt = null;
-
-    #[ORM\Column(type: 'boolean')]
-    private bool $readReceiptEnabled = true;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isDeleted = false;
@@ -104,14 +104,25 @@ class DirectMessage
         return $this;
     }
 
-    public function getEncryptedKey(): string
+    public function getEncryptedKeyForRecipient(): string
     {
-        return $this->encryptedKey;
+        return $this->encryptedKeyForRecipient;
     }
 
-    public function setEncryptedKey(string $encryptedKey): self
+    public function setEncryptedKeyForRecipient(string $encryptedKeyForRecipient): self
     {
-        $this->encryptedKey = $encryptedKey;
+        $this->encryptedKeyForRecipient = $encryptedKeyForRecipient;
+        return $this;
+    }
+
+    public function getEncryptedKeyForSender(): string
+    {
+        return $this->encryptedKeyForSender;
+    }
+
+    public function setEncryptedKeyForSender(string $encryptedKeyForSender): self
+    {
+        $this->encryptedKeyForSender = $encryptedKeyForSender;
         return $this;
     }
 
@@ -164,17 +175,6 @@ class DirectMessage
     public function getReadAt(): ?\DateTime
     {
         return $this->readAt;
-    }
-
-    public function isReadReceiptEnabled(): bool
-    {
-        return $this->readReceiptEnabled;
-    }
-
-    public function setReadReceiptEnabled(bool $readReceiptEnabled): self
-    {
-        $this->readReceiptEnabled = $readReceiptEnabled;
-        return $this;
     }
 
     public function isDeleted(): bool

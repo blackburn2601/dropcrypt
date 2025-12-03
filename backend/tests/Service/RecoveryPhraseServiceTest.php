@@ -75,3 +75,4 @@ class RecoveryPhraseServiceTest extends TestCase
     }
 }
 
+
