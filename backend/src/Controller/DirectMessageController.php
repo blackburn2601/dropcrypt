@@ -44,11 +44,12 @@ class DirectMessageController extends AbstractController
         
         $recipientId = $data['recipientId'] ?? null;
         $encryptedContent = $data['encryptedContent'] ?? null;
-        $encryptedKey = $data['encryptedKey'] ?? null;
+        $encryptedKeyForRecipient = $data['encryptedKeyForRecipient'] ?? null;
+        $encryptedKeyForSender = $data['encryptedKeyForSender'] ?? null;
         
-        if (!$recipientId || !$encryptedContent || !$encryptedKey) {
+        if (!$recipientId || !$encryptedContent || !$encryptedKeyForRecipient || !$encryptedKeyForSender) {
             return new JsonResponse([
-                'error' => 'Missing required fields: recipientId, encryptedContent, encryptedKey'
+                'error' => 'Missing required fields: recipientId, encryptedContent, encryptedKeyForRecipient, encryptedKeyForSender'
             ], Response::HTTP_BAD_REQUEST);
         }
         
@@ -66,7 +67,8 @@ class DirectMessageController extends AbstractController
         $message->setSenderId($user->getAnonymousId());
         $message->setRecipientId($recipientId);
         $message->setEncryptedContent($encryptedContent);
-        $message->setEncryptedKey($encryptedKey);
+        $message->setEncryptedKeyForRecipient($encryptedKeyForRecipient);
+        $message->setEncryptedKeyForSender($encryptedKeyForSender);
         
         $this->entityManager->persist($message);
         
@@ -118,7 +120,7 @@ class DirectMessageController extends AbstractController
                 'messageId' => $message->getMessageId(),
                 'senderId' => $message->getSenderId(),
                 'encryptedContent' => $message->getEncryptedContent(),
-                'encryptedKey' => $message->getEncryptedKey(),
+                'encryptedKey' => $message->getEncryptedKeyForRecipient(), // User is recipient
                 'sentAt' => $message->getSentAt()->format('c'),
                 'expiresAt' => $message->getExpiresAt()->format('c'),
                 'isRead' => $message->getIsRead(),
@@ -257,7 +259,9 @@ class DirectMessageController extends AbstractController
                 'senderId' => $message->getSenderId(),
                 'recipientId' => $message->getRecipientId(),
                 'encryptedContent' => $message->getEncryptedContent(),
-                'encryptedKey' => $isSender ? null : $message->getEncryptedKey(), // Only include key for recipient
+                'encryptedKey' => $isSender 
+                    ? $message->getEncryptedKeyForSender()  // Sender uses their key
+                    : $message->getEncryptedKeyForRecipient(), // Recipient uses their key
                 'sentAt' => $message->getSentAt()->format('c'),
                 'expiresAt' => $message->getExpiresAt()->format('c'),
                 'isRead' => $message->getIsRead(),
@@ -397,7 +401,7 @@ class DirectMessageController extends AbstractController
                 'messageId' => $message->getMessageId(),
                 'senderId' => $message->getSenderId(),
                 'encryptedContent' => $message->getEncryptedContent(),
-                'encryptedKey' => $message->getEncryptedKey(),
+                'encryptedKey' => $message->getEncryptedKeyForRecipient(), // Polling for inbox
                 'sentAt' => $message->getSentAt()->format('c'),
                 'expiresAt' => $message->getExpiresAt()->format('c'),
                 'isRead' => $message->getIsRead()

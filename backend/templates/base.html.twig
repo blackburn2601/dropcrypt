@@ -201,12 +201,12 @@
             
             /* Professional security card */
             .security-card {
-                background: rgba(30, 30, 30, 0.8);
+                background: rgba(30, 30, 30, 0.4);
                 border: 1px solid rgba(37, 99, 235, 0.25);
                 border-radius: 12px;
                 box-shadow: 
-                    0 4px 6px -1px rgba(0, 0, 0, 0.5),
-                    0 2px 4px -1px rgba(0, 0, 0, 0.4),
+                    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+                    0 2px 4px -1px rgba(0, 0, 0, 0.2),
                     inset 0 1px 0 rgba(255, 255, 255, 0.03);
                 position: relative;
                 transition: all 0.3s ease;
@@ -226,11 +226,11 @@
             .security-card:hover {
                 border-color: rgba(37, 99, 235, 0.5);
                 box-shadow: 
-                    0 10px 15px -3px rgba(0, 0, 0, 0.6),
-                    0 4px 6px -2px rgba(0, 0, 0, 0.4),
+                    0 10px 15px -3px rgba(0, 0, 0, 0.4),
+                    0 4px 6px -2px rgba(0, 0, 0, 0.3),
                     0 0 20px rgba(37, 99, 235, 0.15);
                 transform: translateY(-2px);
-                background: rgba(35, 35, 35, 0.9);
+                background: rgba(35, 35, 35, 0.6);
             }
             
             /* Professional input */
@@ -299,7 +299,7 @@
             
             /* Feature card professional style */
             .feature-security {
-                background: rgba(30, 30, 30, 0.7);
+                background: rgba(30, 30, 30, 0.3);
                 border: 1px solid rgba(37, 99, 235, 0.2);
                 border-radius: 12px;
                 transition: all 0.3s ease;
@@ -322,7 +322,7 @@
                 border-color: rgba(37, 99, 235, 0.4);
                 box-shadow: 0 8px 16px rgba(37, 99, 235, 0.15);
                 transform: translateY(-4px);
-                background: rgba(35, 35, 35, 0.85);
+                background: rgba(35, 35, 35, 0.5);
             }
             
             .feature-security:hover::before {
@@ -337,7 +337,7 @@
                 background: rgba(16, 185, 129, 0.1);
                 border: 1px solid rgba(16, 185, 129, 0.3);
                 border-radius: 6px;
-                color: #10b981;
+                color: #3b82f6;
                 font-size: 0.75rem;
                 font-weight: 600;
                 letter-spacing: 0.5px;
@@ -383,11 +383,6 @@
             
             /* Mobile responsive styles */
             @media (max-width: 640px) {
-                /* Increase side margins on mobile */
-                main {
-                    padding-left: 1rem !important;
-                    padding-right: 1rem !important;
-                }
                 
                 /* Footer centering on mobile */
                 footer .grid {
@@ -432,22 +427,22 @@
         <div class="encryption-bg" id="encryptionBg"></div>
         
         <nav class="security-nav sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-20 items-center">
+            <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+                <div class="flex justify-between h-16 sm:h-20 items-center">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 flex items-center">
-                            <a href="{{ path('app_home') }}" class="inline-flex items-center text-2xl font-bold transition-colors duration-200" style="color: #60a5fa;">
-                                <div class="bg-gradient-to-br from-blue-600 to-blue-500 p-2.5 rounded-lg mr-3 icon-security shadow-lg">
-                                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <a href="{{ path('app_home') }}" class="inline-flex items-center text-xl sm:text-2xl font-bold transition-colors duration-200" style="color: #60a5fa;">
+                                <div class="bg-gradient-to-br from-blue-600 to-blue-500 p-2 sm:p-2.5 rounded-lg mr-2 sm:mr-3 icon-security shadow-lg">
+                                    <svg class="h-6 w-6 sm:h-7 sm:w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                     </svg>
                                 </div>
-                                <span style="color: #f1f5f9;">DropCrypt</span>
-                                <span class="trust-badge ml-3">SECURE</span>
+                                <span class="trust-badge ml-2 sm:ml-3 text-sm sm:text-sm">DropCrypt</span>
                             </a>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 sm:gap-4">
+                    <!-- Navigation for NOT logged in users -->
+                    <div id="nav-guest" class="flex items-center gap-2 sm:gap-4">
                         <div class="hidden lg:flex items-center gap-2 text-sm" style="color: #cbd5e1;">
                             <svg class="h-4 w-4" style="color: #34d399;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
@@ -462,19 +457,53 @@
                             Login
                         </a>
                         
-                        <a href="/account/create" class="btn-security inline-flex items-center px-4 sm:px-5 py-2 sm:py-2.5 text-sm font-semibold focus:outline-none">
-                            <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <a href="/account/create" class="btn-security inline-flex items-center px-4 sm:px-5 py-2.5 sm:py-2.5 text-sm font-semibold focus:outline-none">
+                            <svg class="h-5 w-5 sm:h-4 sm:w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                             </svg>
                             <span class="hidden sm:inline">Create Account</span>
                             <span class="sm:hidden">Sign Up</span>
                         </a>
                     </div>
+
+                    <!-- Navigation for logged in users -->
+                    <div id="nav-user" class="hidden items-center gap-1 sm:gap-2 md:gap-4">
+                        <span id="nav-user-id" class="hidden lg:inline-flex text-xs sm:text-sm font-mono text-gray-400 px-2 sm:px-3 py-1 bg-gray-800 bg-opacity-50 rounded"></span>
+                        
+                        <a href="/dashboard" class="inline-flex items-center px-3 sm:px-3 md:px-4 py-2 sm:py-2 text-xs sm:text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                            <svg class="h-6 w-6 sm:h-4 sm:w-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                            <span class="hidden sm:inline">Dashboard</span>
+                        </a>
+                        
+                        <a href="/contacts" class="inline-flex items-center px-3 sm:px-3 md:px-4 py-2 sm:py-2 text-xs sm:text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                            <svg class="h-6 w-6 sm:h-4 sm:w-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            <span class="hidden sm:inline">Contacts</span>
+                        </a>
+                        
+                        <a href="/account/settings" class="inline-flex items-center px-3 sm:px-3 md:px-4 py-2 sm:py-2 text-xs sm:text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                            <svg class="h-6 w-6 sm:h-4 sm:w-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span class="hidden sm:inline">Settings</span>
+                        </a>
+                        
+                        <button id="nav-logout-btn" class="inline-flex items-center px-3 sm:px-3 md:px-4 py-2 sm:py-2 text-xs sm:text-sm font-medium text-red-400 hover:text-red-300 transition-colors">
+                            <svg class="h-6 w-6 sm:h-4 sm:w-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            </svg>
+                            <span class="hidden sm:inline">Logout</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </nav>
 
-        <main class="max-w-7xl mx-auto py-4 sm:py-8 px-4 sm:px-6 lg:px-8 relative" style="z-index: 2;">
+        <main class="flex-1 flex flex-col relative" style="z-index: 2;">
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
                     <div class="animate__animated animate__fadeIn mb-4 p-4 security-card {% if label == 'success' %}{% else %}{% endif %}" style="{% if label == 'success' %}border-color: rgba(16, 185, 129, 0.4); color: #10b981;{% else %}border-color: rgba(239, 68, 68, 0.4); color: #ef4444;{% endif %}">
@@ -497,7 +526,7 @@
             {% block body %}{% endblock %}
         </main>
 
-        <footer class="border-t border-gray-800 relative" style="z-index: 2; border-color: rgba(37, 99, 235, 0.2); margin-top: auto;">
+        <footer class="hidden md:block border-t border-gray-800 relative" style="z-index: 2; border-color: rgba(37, 99, 235, 0.2); margin-top: auto;">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                     <div class="text-center md:text-left">
@@ -674,6 +703,99 @@
                 }
             }, 400);
         });
+        </script>
+
+        <!-- Dynamic Navbar based on login status -->
+        <script>
+        (function() {
+            const sessionToken = localStorage.getItem('dropcrypt_session');
+            const anonymousId = localStorage.getItem('dropcrypt_anonymous_id');
+            const isLoggedIn = !!(sessionToken && anonymousId);
+
+            const navGuest = document.getElementById('nav-guest');
+            const navUser = document.getElementById('nav-user');
+            const navUserId = document.getElementById('nav-user-id');
+            const navLogoutBtn = document.getElementById('nav-logout-btn');
+
+            if (isLoggedIn) {
+                // Show logged in navigation
+                navGuest.classList.add('hidden');
+                navUser.classList.remove('hidden');
+                navUser.classList.add('flex');
+                
+                // Display user ID (shortened for mobile)
+                if (navUserId && anonymousId) {
+                    navUserId.textContent = anonymousId;
+                }
+
+                // Logout handler
+                if (navLogoutBtn) {
+                    navLogoutBtn.addEventListener('click', async function(e) {
+                        e.preventDefault();
+                        
+                        // Call logout API
+                        try {
+                            await fetch('/api/accounts/logout', {
+                                method: 'POST',
+                                headers: { 'Authorization': 'Bearer ' + sessionToken }
+                            });
+                        } catch (error) {
+                            console.error('Logout API error:', error);
+                        }
+                        
+                        // Complete storage cleanup
+                        clearAllDropCryptData();
+                        
+                        // Redirect to home
+                        window.location.href = '/';
+                    });
+                }
+            } else {
+                // Show guest navigation
+                navGuest.classList.remove('hidden');
+                navGuest.classList.add('flex');
+                navUser.classList.add('hidden');
+            }
+            
+            /**
+             * Comprehensive cleanup function
+             * Removes all DropCrypt data from localStorage, sessionStorage, and memory
+             */
+            function clearAllDropCryptData() {
+                // 1. Remove known DropCrypt keys from localStorage
+                const knownKeys = [
+                    'dropcrypt_session',
+                    'dropcrypt_anonymous_id',
+                    'dropcrypt_public_key',
+                    'dropcrypt_private_key'
+                ];
+                
+                knownKeys.forEach(key => {
+                    localStorage.removeItem(key);
+                });
+                
+                // 2. Scan and remove any other "dropcrypt_*" prefixed keys
+                const toRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('dropcrypt_')) {
+                        toRemove.push(key);
+                    }
+                }
+                
+                toRemove.forEach(key => {
+                    localStorage.removeItem(key);
+                });
+                
+                // 3. Clear entire sessionStorage (safe - session-specific)
+                sessionStorage.clear();
+                
+                console.log('✓ All DropCrypt data cleared');
+            }
+            
+            // Make clearAllDropCryptData available globally
+            window.clearAllDropCryptData = clearAllDropCryptData;
+        })();
         </script>
         
         {% block javascripts %}{% endblock %}

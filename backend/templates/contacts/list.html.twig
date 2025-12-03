@@ -3,25 +3,34 @@
 {% block title %}Contacts - DropCrypt{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-    <!-- Header -->
-    <nav class="bg-gray-900 bg-opacity-50 backdrop-blur-lg border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-4">
-                    <a href="/dashboard" class="text-gray-400 hover:text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                        </svg>
-                    </a>
-                    <h1 class="text-xl font-bold text-white">Contacts</h1>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="glass-card p-6">
+<style>
+    /* Transparent gradient overlay */
+    .contacts-gradient-overlay {
+        background: linear-gradient(135deg, 
+            rgba(17, 24, 39, 0.5) 0%,    /* gray-900 with 50% opacity */
+            rgba(30, 58, 138, 0.4) 50%,  /* blue-900 with 40% opacity */
+            rgba(88, 28, 135, 0.3) 100%  /* purple-900 with 30% opacity */
+        );
+    }
+    
+    /* Glass card with better contrast */
+    .glass-card {
+        background: rgba(30, 30, 30, 0.7);
+        border: 1px solid rgba(37, 99, 235, 0.3);
+        border-radius: 12px;
+        box-shadow: 
+            0 4px 6px -1px rgba(0, 0, 0, 0.3),
+            0 2px 4px -1px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+</style>
+<div class="h-full flex flex-col contacts-gradient-overlay">
+    <div class="flex-1 overflow-y-auto">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-bold text-white mb-6">Contacts</h1>
+            <div class="glass-card p-6">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-white">Your Contacts</h2>
                 <button id="btn-add-contact" class="btn-security px-6 py-2">

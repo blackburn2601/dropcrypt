@@ -281,17 +281,61 @@ class CryptoHelper {
     }
 
     /**
+     * Complete message encryption for both sender and recipient
+     */
+    async encryptMessageForBoth(message, recipientPublicKeyBase64, senderPublicKeyBase64) {
+        // 1. Encrypt message with AES-256-GCM
+        const { encryptedContent, aesKey, iv } = await this.encryptMessage(message);
+
+        // 2. Encrypt AES key with recipient's public key
+        const encryptedKeyForRecipient = await this.encryptKeyForRecipient(aesKey, recipientPublicKeyBase64);
+
+        // 3. Encrypt AES key with sender's public key (so sender can decrypt their own messages)
+        const encryptedKeyForSender = await this.encryptKeyForRecipient(aesKey, senderPublicKeyBase64);
+
+        return {
+            encryptedContent: encryptedContent + '.' + iv,
+            encryptedKeyForRecipient: encryptedKeyForRecipient,
+            encryptedKeyForSender: encryptedKeyForSender
+        };
+    }
+
+    /**
      * Complete message decryption
      */
     async decryptMessageComplete(encryptedContentWithIv, encryptedKey, privateKey) {
+        console.log('🔐 decryptMessageComplete called with:', {
+            encryptedContentWithIv: encryptedContentWithIv?.substring(0, 50) + '...',
+            encryptedContentLength: encryptedContentWithIv?.length,
+            hasEncryptedKey: !!encryptedKey,
+            hasPrivateKey: !!privateKey,
+            hasDotInContent: encryptedContentWithIv?.includes('.')
+        });
+        
         // 1. Split encrypted content and IV
         const [encryptedContent, iv] = encryptedContentWithIv.split('.');
+        
+        console.log('Split result:', {
+            hasEncryptedContent: !!encryptedContent,
+            hasIv: !!iv,
+            encryptedContentLength: encryptedContent?.length,
+            ivLength: iv?.length
+        });
+
+        if (!iv) {
+            throw new Error('IV is missing from encrypted content. Expected format: encryptedContent.iv');
+        }
 
         // 2. Decrypt AES key with private key
+        console.log('Decrypting AES key...');
         const aesKey = await this.decryptKey(encryptedKey, privateKey);
+        console.log('AES key decrypted, length:', aesKey?.length);
 
         // 3. Decrypt message with AES key
-        return await this.decryptMessage(encryptedContent, aesKey, iv);
+        console.log('Decrypting message content...');
+        const result = await this.decryptMessage(encryptedContent, aesKey, iv);
+        console.log('✅ Message decrypted successfully');
+        return result;
     }
 
     /**
@@ -310,14 +354,42 @@ class CryptoHelper {
     }
 
     /**
-     * Clear all stored keys
+     * Clear all stored keys and data (comprehensive cleanup)
      */
     clearKeys() {
-        localStorage.removeItem('dropcrypt_private_key');
-        localStorage.removeItem('dropcrypt_session');
-        localStorage.removeItem('dropcrypt_anonymous_id');
+        // 1. Remove known DropCrypt keys from localStorage
+        const knownKeys = [
+            'dropcrypt_session',
+            'dropcrypt_anonymous_id',
+            'dropcrypt_public_key',
+            'dropcrypt_private_key'
+        ];
+        
+        knownKeys.forEach(key => {
+            localStorage.removeItem(key);
+        });
+        
+        // 2. Scan and remove any other "dropcrypt_*" prefixed keys
+        const toRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('dropcrypt_')) {
+                toRemove.push(key);
+            }
+        }
+        
+        toRemove.forEach(key => {
+            localStorage.removeItem(key);
+        });
+        
+        // 3. Clear entire sessionStorage (safe - session-specific)
+        sessionStorage.clear();
+        
+        // 4. Clear in-memory state
         this.keyPair = null;
         this.privateKeyEncrypted = null;
+        
+        console.log('✓ All DropCrypt data cleared from storage');
     }
 
     /**

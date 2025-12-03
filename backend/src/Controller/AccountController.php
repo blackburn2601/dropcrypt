@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\AnonymousUser;
-use App\Entity\UserPreference;
 use App\Repository\AnonymousUserRepository;
 use App\Repository\UserSessionRepository;
-use App\Repository\UserPreferenceRepository;
 use App\Service\PasswordGeneratorService;
 use App\Service\RecoveryPhraseService;
 use App\Service\SessionAuthService;
@@ -24,7 +22,6 @@ class AccountController extends AbstractController
         private EntityManagerInterface $entityManager,
         private AnonymousUserRepository $userRepository,
         private UserSessionRepository $sessionRepository,
-        private UserPreferenceRepository $preferenceRepository,
         private PasswordGeneratorService $passwordGenerator,
         private RecoveryPhraseService $recoveryPhraseService,
         private SessionAuthService $authService
@@ -86,12 +83,6 @@ class AccountController extends AbstractController
         $user->setPublicKey(''); // Will be set in finalize step
         
         $this->entityManager->persist($user);
-        $this->entityManager->flush();
-        
-        // Create default preferences
-        $preferences = new UserPreference();
-        $preferences->setUserId($user->getAnonymousId());
-        $this->entityManager->persist($preferences);
         $this->entityManager->flush();
         
         return new JsonResponse([

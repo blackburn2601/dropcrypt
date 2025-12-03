@@ -39,12 +39,12 @@ final class Version20251125000000 extends AbstractMigration
             sender_id VARCHAR(64) NOT NULL,
             recipient_id VARCHAR(64) NOT NULL,
             encrypted_content TEXT NOT NULL,
-            encrypted_key TEXT NOT NULL,
+            encrypted_key_for_recipient TEXT NOT NULL,
+            encrypted_key_for_sender TEXT NOT NULL,
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             expires_at DATETIME NOT NULL,
             is_read TINYINT(1) NOT NULL DEFAULT 0,
             read_at DATETIME NULL,
-            read_receipt_enabled TINYINT(1) NOT NULL DEFAULT 1,
             is_deleted TINYINT(1) NOT NULL DEFAULT 0,
             UNIQUE INDEX UNIQ_message_id (message_id),
             INDEX IDX_sender (sender_id, created_at),
@@ -82,23 +82,10 @@ final class Version20251125000000 extends AbstractMigration
             CONSTRAINT FK_contact_contact FOREIGN KEY (contact_id) REFERENCES anonymous_users (anonymous_id) ON DELETE CASCADE,
             PRIMARY KEY(id)
         ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-
-        // User Preferences Table
-        $this->addSql('CREATE TABLE user_preferences (
-            id BIGINT AUTO_INCREMENT NOT NULL,
-            user_id VARCHAR(64) NOT NULL,
-            send_read_receipts TINYINT(1) NOT NULL DEFAULT 1,
-            receive_read_receipts TINYINT(1) NOT NULL DEFAULT 1,
-            show_statistics TINYINT(1) NOT NULL DEFAULT 1,
-            UNIQUE INDEX UNIQ_user_prefs (user_id),
-            CONSTRAINT FK_prefs_user FOREIGN KEY (user_id) REFERENCES anonymous_users (anonymous_id) ON DELETE CASCADE,
-            PRIMARY KEY(id)
-        ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE user_preferences');
         $this->addSql('DROP TABLE user_contacts');
         $this->addSql('DROP TABLE user_sessions');
         $this->addSql('DROP TABLE direct_messages');

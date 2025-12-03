@@ -3,7 +3,30 @@
 {% block title %}Recover Account - DropCrypt{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center px-4">
+<style>
+    /* Transparent gradient overlay for account recovery page */
+    .recover-gradient-overlay {
+        background: linear-gradient(135deg, 
+            rgba(17, 24, 39, 0.5) 0%,    /* gray-900 with 50% opacity */
+            rgba(30, 58, 138, 0.4) 50%,  /* blue-900 with 40% opacity */
+            rgba(88, 28, 135, 0.3) 100%  /* purple-900 with 30% opacity */
+        );
+    }
+    
+    /* Glass card with better contrast */
+    .glass-card {
+        background: rgba(30, 30, 30, 0.7);
+        border: 1px solid rgba(37, 99, 235, 0.3);
+        border-radius: 12px;
+        box-shadow: 
+            0 4px 6px -1px rgba(0, 0, 0, 0.3),
+            0 2px 4px -1px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+</style>
+<div class="h-full recover-gradient-overlay flex items-center justify-center px-4">
     <div class="max-w-2xl w-full">
         <div class="glass-card p-8">
             <div class="text-center mb-8">
@@ -92,7 +115,7 @@
     </div>
 </div>
 
-<script src="/js/crypto-helper.js"></script>
+<script src="/js/crypto-helper.js?v=4"></script>
 <script>
 (async function() {
     const btnRecover = document.getElementById('btn-recover');
@@ -195,9 +218,10 @@
             // Save session data
             localStorage.setItem('dropcrypt_session', data.sessionToken);
             localStorage.setItem('dropcrypt_anonymous_id', data.anonymousId);
+            localStorage.setItem('dropcrypt_public_key', publicKey); // Save public key for encryption
             
-            // Save password to sessionStorage for message decryption
-            sessionStorage.setItem('session_password', newPassword);
+            // Note: Password is NOT stored for security reasons
+            // User will be prompted when accessing encrypted messages
 
             showSuccess();
 

@@ -3,36 +3,45 @@
 {% block title %}Chat - DropCrypt{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex flex-col">
-    <!-- Header -->
-    <nav class="bg-gray-900 bg-opacity-50 backdrop-blur-lg border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-4">
-                    <a href="/dashboard" class="text-gray-400 hover:text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                        </svg>
-                    </a>
-                    <div>
-                        <h2 id="contact-name" class="text-lg font-semibold text-white"></h2>
-                        <p id="contact-id" class="text-xs text-gray-400"></p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <button id="btn-contact-info" class="text-gray-400 hover:text-white p-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </button>
+<style>
+    /* Make main element fill height for chat page */
+    main { overflow: hidden; }
+    
+    /* Transparent gradient overlay for chat */
+    .chat-gradient-overlay {
+        background: linear-gradient(135deg, 
+            rgba(17, 24, 39, 0.5) 0%,    /* gray-900 with 50% opacity */
+            rgba(30, 58, 138, 0.4) 50%,  /* blue-900 with 40% opacity */
+            rgba(88, 28, 135, 0.3) 100%  /* purple-900 with 30% opacity */
+        );
+    }
+</style>
+<div class="absolute inset-0 chat-gradient-overlay flex flex-col">
+    <!-- Chat Header -->
+    <div class="flex-shrink-0 bg-gray-900 bg-opacity-50 backdrop-blur-lg border-b border-gray-800 px-2 sm:px-4 py-2 sm:py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <a href="/dashboard" class="text-gray-400 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                </a>
+                <div>
+                    <h2 id="contact-name" class="text-base font-semibold text-white"></h2>
+                    <p id="contact-id" class="text-xs text-gray-400"></p>
                 </div>
             </div>
+            <button id="btn-contact-info" class="text-gray-400 hover:text-white p-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </button>
         </div>
-    </nav>
+    </div>
 
     <!-- Messages Container -->
-    <div class="flex-1 overflow-y-auto px-4 py-6" id="messages-container">
-        <div class="max-w-4xl mx-auto space-y-4" id="messages-list">
+    <div class="flex-1 overflow-y-auto px-2 sm:px-4 py-3 sm:py-6" id="messages-container">
+        <div class="max-w-4xl mx-auto space-y-2 sm:space-y-4" id="messages-list">
             <!-- Messages will be loaded here -->
         </div>
 
@@ -41,12 +50,12 @@
             <p class="text-gray-400 mt-2 text-sm">Loading messages...</p>
         </div>
 
-        <div id="no-messages" class="hidden text-center py-12 text-gray-400">
-            <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div id="no-messages" class="hidden text-center py-8 sm:py-12 text-gray-400">
+            <svg class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
             </svg>
-            <p class="text-lg">No messages yet</p>
-            <p class="text-sm mt-1">Start the conversation below</p>
+            <p class="text-base sm:text-lg">No messages yet</p>
+            <p class="text-xs sm:text-sm mt-1">Start the conversation below</p>
         </div>
 
         <!-- Decryption error -->
@@ -61,21 +70,22 @@
     </div>
 
     <!-- Message Input -->
-    <div class="bg-gray-900 bg-opacity-50 backdrop-blur-lg border-t border-gray-800 px-4 py-4">
+    <div class="flex-shrink-0 bg-gray-900 bg-opacity-50 backdrop-blur-lg border-t border-gray-800 px-2 sm:px-4 py-2 sm:py-4">
         <div class="max-w-4xl mx-auto">
-            <div class="flex items-end space-x-3">
-                <div class="flex-1">
+            <div class="flex items-stretch space-x-2 sm:space-x-3">
+                <div class="flex-1 flex items-center">
                     <textarea 
                         id="message-input" 
                         rows="1"
-                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
-                        placeholder="Type a message... (Shift+Enter for new line)"
-                        style="max-height: 120px;"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
+                        placeholder="Type a message..."
+                        style="max-height: 120px; min-height: 44px;"
                     ></textarea>
                 </div>
                 <button 
                     id="btn-send" 
-                    class="btn-security px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="btn-security px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    style="min-height: 44px;"
                     disabled
                 >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,14 +97,13 @@
             <div id="send-error" class="hidden mt-2 text-red-400 text-sm"></div>
             
             <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
-                <span>End-to-end encrypted · Messages expire in 24h</span>
                 <span id="char-count">0 / 5000</span>
             </div>
         </div>
     </div>
 </div>
 
-<script src="/js/crypto-helper.js"></script>
+<script src="/js/crypto-helper.js?v=4"></script>
 <script>
 (async function() {
     const crypto = new CryptoHelper();
@@ -104,20 +113,32 @@
     // Check authentication
     const sessionToken = localStorage.getItem('dropcrypt_session');
     const anonymousId = localStorage.getItem('dropcrypt_anonymous_id');
-    const password = sessionStorage.getItem('session_password'); // For decryption
+    const senderPublicKey = localStorage.getItem('dropcrypt_public_key'); // Sender's own public key
 
     if (!sessionToken || !anonymousId) {
         window.location.href = '/account/login';
         return;
     }
 
-    let privateKey = null;
+    // Private key cache (in RAM only, expires after 15 minutes)
+    let privateKeyCache = null;
+    let keyExpiryTime = null;
+    const KEY_CACHE_LIFETIME = 15 * 60 * 1000; // 15 minutes
+    
     let recipientPublicKey = null;
     let pollingInterval;
+    let isFirstLoad = true;
 
-    // Load private key
+    // Load private key (with time-limited RAM cache, no password storage)
     async function loadPrivateKey() {
         try {
+            // Check if cached key is still valid
+            if (privateKeyCache && keyExpiryTime && Date.now() < keyExpiryTime) {
+                console.log('Using cached private key');
+                return privateKeyCache;
+            }
+
+            // Cache expired or doesn't exist
             const encryptedKey = crypto.loadEncryptedPrivateKey();
             if (!encryptedKey) {
                 console.warn('No private key found in storage - this is normal on first login from a new device');
@@ -125,30 +146,31 @@
                 return null;
             }
 
-            // Try to use cached password from session
-            let pwd = password;
+            // Prompt for password (password is NEVER stored)
+            const pwd = prompt('🔐 Enter your password to decrypt messages:\n\n(Key will be cached for 15 minutes)');
+            
             if (!pwd) {
-                // Prompt for password
-                pwd = prompt('Enter your password to decrypt messages:');
-                if (pwd) {
-                    try {
-                        // Test if password is correct
-                        const testKey = await crypto.getPrivateKey(pwd);
-                        sessionStorage.setItem('session_password', pwd);
-                        return testKey;
-                    } catch (e) {
-                        alert('Incorrect password. Messages cannot be decrypted.');
-                        document.getElementById('decrypt-error').classList.remove('hidden');
-                        return null;
-                    }
-                } else {
-                    // User cancelled
-                    document.getElementById('decrypt-error').classList.remove('hidden');
-                    return null;
-                }
+                // User cancelled
+                document.getElementById('decrypt-error').classList.remove('hidden');
+                return null;
             }
 
-            return await crypto.getPrivateKey(pwd);
+            try {
+                // Decrypt private key with password
+                const decryptedKey = await crypto.getPrivateKey(pwd);
+                
+                // Cache key in RAM only (NOT password!)
+                privateKeyCache = decryptedKey;
+                keyExpiryTime = Date.now() + KEY_CACHE_LIFETIME;
+                
+                console.log('Private key cached until:', new Date(keyExpiryTime).toLocaleTimeString());
+                
+                return decryptedKey;
+            } catch (e) {
+                alert('❌ Incorrect password. Messages cannot be decrypted.');
+                document.getElementById('decrypt-error').classList.remove('hidden');
+                return null;
+            }
         } catch (error) {
             console.error('Failed to load private key:', error);
             document.getElementById('decrypt-error').classList.remove('hidden');
@@ -193,6 +215,11 @@
     // Load and decrypt messages
     async function loadMessages() {
         try {
+            const container = document.getElementById('messages-container');
+            
+            // Check if user was already at the bottom before loading
+            const wasAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+            
             const response = await fetch(`/api/direct-messages/thread/${otherUserId}`, {
                 headers: { 'Authorization': 'Bearer ' + sessionToken }
             });
@@ -200,6 +227,7 @@
             if (!response.ok) throw new Error('Failed to load messages');
 
             const data = await response.json();
+            console.log('Loaded messages:', data.messages.length);
             const messagesList = document.getElementById('messages-list');
             const messagesLoader = document.getElementById('messages-loader');
             const noMessages = document.getElementById('no-messages');
@@ -220,19 +248,50 @@
                 let content = '[Encrypted]';
                 
                 try {
-                    if (!msg.isSender && privateKey && msg.encryptedKey) {
-                        // Decrypt received message
+                    // Check if key cache is still valid
+                    if (privateKeyCache && (!keyExpiryTime || Date.now() >= keyExpiryTime)) {
+                        // Key expired, need to re-prompt
+                        privateKeyCache = await loadPrivateKey();
+                    }
+                    
+                    if (privateKeyCache && msg.encryptedKey) {
+                        console.log('🔓 Attempting to decrypt message:', {
+                            messageId: msg.messageId,
+                            isSender: msg.isSender,
+                            hasEncryptedContent: !!msg.encryptedContent,
+                            encryptedContentLength: msg.encryptedContent?.length,
+                            hasEncryptedKey: !!msg.encryptedKey,
+                            encryptedKeyLength: msg.encryptedKey?.length,
+                            hasPrivateKey: !!privateKeyCache
+                        });
+                        
+                        // Decrypt message (works for both sent and received)
                         content = await crypto.decryptMessageComplete(
                             msg.encryptedContent,
                             msg.encryptedKey,
-                            privateKey
+                            privateKeyCache
                         );
-                    } else if (msg.isSender) {
-                        // For sent messages, show encrypted indicator
-                        content = '[Sent - Encrypted]';
+                        console.log('✅ Message decrypted successfully:', msg.messageId);
+                    } else if (!privateKeyCache) {
+                        content = '[Private key not available - cannot decrypt]';
+                        console.warn('No private key cache available');
+                    } else if (!msg.encryptedKey) {
+                        content = '[Encryption key missing]';
+                        console.warn('No encrypted key in message:', msg.messageId);
                     }
                 } catch (error) {
-                    console.error('Decryption failed:', error);
+                    console.error('❌ Decryption failed for message:', msg.messageId);
+                    console.error('Error:', error);
+                    console.error('Error stack:', error.stack);
+                    console.error('Message details:', {
+                        messageId: msg.messageId,
+                        isSender: msg.isSender,
+                        hasEncryptedContent: !!msg.encryptedContent,
+                        hasEncryptedKey: !!msg.encryptedKey,
+                        hasPrivateKey: !!privateKeyCache,
+                        encryptedContent: msg.encryptedContent?.substring(0, 50) + '...',
+                        encryptedKey: msg.encryptedKey?.substring(0, 50) + '...'
+                    });
                     content = '[Failed to decrypt]';
                 }
 
@@ -247,23 +306,41 @@
                 }
             }
 
-            messagesList.innerHTML = decryptedMessages.map(msg => `
-                <div class="flex ${msg.isSender ? 'justify-end' : 'justify-start'}">
-                    <div class="max-w-md ${msg.isSender ? 'bg-blue-600' : 'bg-gray-800'} rounded-lg px-4 py-3">
-                        <p class="text-white break-words">${msg.decrypted}</p>
-                        <div class="flex items-center justify-between mt-1 space-x-3">
-                            <span class="text-xs ${msg.isSender ? 'text-blue-200' : 'text-gray-400'}">
-                                ${new Date(msg.sentAt).toLocaleTimeString()}
-                            </span>
-                            ${msg.isSender && msg.isRead ? '<span class="text-xs text-blue-200">✓✓ Read</span>' : ''}
+            messagesList.innerHTML = decryptedMessages.map(msg => {
+                // Determine checkmark status for sent messages
+                let statusIcon = '';
+                if (msg.isSender) {
+                    if (msg.isRead) {
+                        // Two checkmarks for read messages (green)
+                        statusIcon = '<span class="text-[10px] sm:text-xs font-bold" title="Read" style="letter-spacing: -2px; color: #4ade80;">✓✓</span>';
+                    } else {
+                        // Single checkmark for sent but not read (orange)
+                        statusIcon = '<span class="text-[10px] sm:text-xs" title="Sent" style="color: #fb923c;">✓</span>';
+                    }
+                }
+                
+                return `
+                    <div class="flex ${msg.isSender ? 'justify-end' : 'justify-start'} px-1 sm:px-0">
+                        <div class="${msg.isSender ? 'bg-blue-600' : 'bg-gray-800'} rounded-lg px-2.5 sm:px-4 py-2 sm:py-3" style="max-width: 280px;">
+                            <p class="text-white break-words text-base sm:text-sm leading-relaxed">${msg.decrypted}</p>
+                            <div class="flex items-center justify-between mt-0.5 sm:mt-1 space-x-2">
+                                <span class="text-[10px] sm:text-xs ${msg.isSender ? 'text-blue-200' : 'text-gray-400'}">
+                                    ${new Date(msg.sentAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
+                                </span>
+                                ${statusIcon}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
-            // Scroll to bottom
-            const container = document.getElementById('messages-container');
-            container.scrollTop = container.scrollHeight;
+            // Scroll to bottom on first load or if user was already at the bottom
+            if (isFirstLoad || wasAtBottom) {
+                setTimeout(() => {
+                    container.scrollTop = container.scrollHeight;
+                }, 10);
+                isFirstLoad = false;
+            }
         } catch (error) {
             console.error('Failed to load messages:', error);
         }
@@ -294,14 +371,42 @@
 
     btnSend.addEventListener('click', async () => {
         const content = messageInput.value.trim();
-        if (!content || !recipientPublicKey) return;
+        
+        // Debug logging
+        console.log('Send button clicked');
+        console.log('Content:', content ? 'present' : 'empty');
+        console.log('Recipient public key:', recipientPublicKey ? 'present' : 'missing');
+        console.log('Sender public key:', senderPublicKey ? 'present' : 'missing');
+        
+        if (!content || !recipientPublicKey || !senderPublicKey) {
+            if (!senderPublicKey) {
+                sendError.textContent = 'Your public key is not available. Please log in again.';
+                sendError.classList.remove('hidden');
+            }
+            return;
+        }
 
         try {
             btnSend.disabled = true;
             sendError.classList.add('hidden');
 
-            // Encrypt message
-            const encrypted = await crypto.encryptMessageComplete(content, recipientPublicKey);
+            // Encrypt message for both sender and recipient
+            const encrypted = await crypto.encryptMessageForBoth(content, recipientPublicKey, senderPublicKey);
+            
+            console.log('Encrypted data:', {
+                hasContent: !!encrypted.encryptedContent,
+                hasRecipientKey: !!encrypted.encryptedKeyForRecipient,
+                hasSenderKey: !!encrypted.encryptedKeyForSender
+            });
+
+            const payload = {
+                recipientId: otherUserId,
+                encryptedContent: encrypted.encryptedContent,
+                encryptedKeyForRecipient: encrypted.encryptedKeyForRecipient,
+                encryptedKeyForSender: encrypted.encryptedKeyForSender
+            };
+            
+            console.log('Sending payload:', payload);
 
             // Send message
             const response = await fetch('/api/direct-messages', {
@@ -310,11 +415,7 @@
                     'Authorization': 'Bearer ' + sessionToken,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    recipientId: otherUserId,
-                    encryptedContent: encrypted.encryptedContent,
-                    encryptedKey: encrypted.encryptedKey
-                })
+                body: JSON.stringify(payload)
             });
 
             if (!response.ok) throw new Error('Failed to send message');
@@ -340,12 +441,29 @@
     });
 
     // Initialize
-    privateKey = await loadPrivateKey();
+    privateKeyCache = await loadPrivateKey();
     await loadRecipientInfo();
     await loadMessages();
 
     // Poll for new messages every 3 seconds
     pollingInterval = setInterval(loadMessages, 3000);
+    
+    // Clear private key cache when page is about to close
+    window.addEventListener('beforeunload', () => {
+        privateKeyCache = null;
+        keyExpiryTime = null;
+        console.log('Private key RAM cache cleared');
+    });
+    
+    // Also clear on visibility change (tab switch, minimize, etc.)
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            // User switched away - clear sensitive data from RAM
+            privateKeyCache = null;
+            keyExpiryTime = null;
+            console.log('Private key RAM cache cleared (tab hidden)');
+        }
+    });
 })();
 </script>
 {% endblock %}

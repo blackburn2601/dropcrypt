@@ -3,37 +3,34 @@
 {% block title %}Dashboard - DropCrypt{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-    <!-- Header -->
-    <nav class="bg-gray-900 bg-opacity-50 backdrop-blur-lg border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-4">
-                    <h1 class="text-xl font-bold text-white">DropCrypt</h1>
-                    <span class="text-sm text-gray-400" id="user-id"></span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button id="btn-contacts" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                        </svg>
-                    </button>
-                    <button id="btn-settings" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                    </button>
-                    <button id="btn-logout" class="text-red-400 hover:text-red-300 px-3 py-2 rounded-md text-sm font-medium">
-                        Logout
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<style>
+    /* Transparent gradient overlay for logged-in pages */
+    .gradient-overlay {
+        background: linear-gradient(135deg, 
+            rgba(17, 24, 39, 0.5) 0%,    /* gray-900 with 50% opacity */
+            rgba(30, 58, 138, 0.4) 50%,  /* blue-900 with 40% opacity */
+            rgba(88, 28, 135, 0.3) 100%  /* purple-900 with 30% opacity */
+        );
+    }
+    
+    /* Glass card with better contrast */
+    .glass-card {
+        background: rgba(30, 30, 30, 0.7);
+        border: 1px solid rgba(37, 99, 235, 0.3);
+        border-radius: 12px;
+        box-shadow: 
+            0 4px 6px -1px rgba(0, 0, 0, 0.3),
+            0 2px 4px -1px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+</style>
+<div class="h-full flex flex-col gradient-overlay">
+    <div class="flex-1 overflow-y-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-bold text-white mb-6">Dashboard</h1>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Sidebar - Threads List -->
             <div class="lg:col-span-1">
                 <div class="glass-card p-6">
@@ -80,33 +77,6 @@
                             Your anonymous, end-to-end encrypted messaging platform. 
                             Messages expire in 24 hours and are encrypted on your device.
                         </p>
-
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                            <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
-                                <svg class="w-8 h-8 mx-auto mb-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                </svg>
-                                <h3 class="text-white font-semibold mb-1">Zero-Knowledge</h3>
-                                <p class="text-gray-400 text-sm">We never see your messages</p>
-                            </div>
-
-                            <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
-                                <svg class="w-8 h-8 mx-auto mb-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                                </svg>
-                                <h3 class="text-white font-semibold mb-1">End-to-End Encrypted</h3>
-                                <p class="text-gray-400 text-sm">RSA-4096 + AES-256-GCM</p>
-                            </div>
-
-                            <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
-                                <svg class="w-8 h-8 mx-auto mb-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <h3 class="text-white font-semibold mb-1">Self-Destructing</h3>
-                                <p class="text-gray-400 text-sm">Messages expire in 24h</p>
-                            </div>
-                        </div>
-
                         <div class="mt-8">
                             <p class="text-gray-400 text-sm mb-4">Your Anonymous ID:</p>
                             <div class="bg-gray-800 bg-opacity-50 px-4 py-3 rounded-lg inline-block">
@@ -144,6 +114,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- New Message Modal -->
@@ -183,7 +154,7 @@
     </div>
 </div>
 
-<script src="/js/crypto-helper.js"></script>
+<script src="/js/crypto-helper.js?v=4"></script>
 <script>
 (async function() {
     const crypto = new CryptoHelper();
@@ -200,7 +171,6 @@
     }
 
     // Display user ID
-    document.getElementById('user-id').textContent = anonymousId;
     document.getElementById('display-user-id').textContent = anonymousId;
 
     // Load user stats
@@ -243,7 +213,7 @@
 
             noThreads.classList.add('hidden');
             threadsList.innerHTML = data.threads.map(thread => `
-                <a href="/chat/thread/${thread.userId}" class="block bg-gray-800 bg-opacity-50 hover:bg-opacity-70 rounded-lg p-4 transition">
+                <a href="/chat/thread/${thread.userId}" class="block bg-gray-800 bg-opacity-80 hover:bg-opacity-95 border border-gray-700 border-opacity-40 hover:border-blue-500 hover:border-opacity-50 rounded-lg p-4 transition-all duration-200">
                     <div class="flex justify-between items-start mb-1">
                         <span class="text-white font-medium">${thread.nickname || thread.userId}</span>
                         ${thread.unreadCount > 0 ? `<span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">${thread.unreadCount}</span>` : ''}
@@ -305,6 +275,12 @@
         if (!recipientId || !messageContent) return;
 
         try {
+            const senderPublicKey = localStorage.getItem('dropcrypt_public_key');
+            
+            if (!senderPublicKey) {
+                throw new Error('Your public key is not available. Please log in again.');
+            }
+
             // Get recipient's public key
             const keyResponse = await fetch(`/api/users/${recipientId}/public-key`, {
                 headers: { 'Authorization': 'Bearer ' + sessionToken }
@@ -314,8 +290,8 @@
 
             const keyData = await keyResponse.json();
 
-            // Encrypt message
-            const encrypted = await crypto.encryptMessageComplete(messageContent, keyData.publicKey);
+            // Encrypt message for both sender and recipient
+            const encrypted = await crypto.encryptMessageForBoth(messageContent, keyData.publicKey, senderPublicKey);
 
             // Send message
             const sendResponse = await fetch('/api/direct-messages', {
@@ -327,7 +303,8 @@
                 body: JSON.stringify({
                     recipientId: recipientId,
                     encryptedContent: encrypted.encryptedContent,
-                    encryptedKey: encrypted.encryptedKey
+                    encryptedKeyForRecipient: encrypted.encryptedKeyForRecipient,
+                    encryptedKeyForSender: encrypted.encryptedKeyForSender
                 })
             });
 
@@ -342,27 +319,6 @@
             document.getElementById('send-error').textContent = error.message;
             document.getElementById('send-error').classList.remove('hidden');
         }
-    });
-
-    // Logout
-    document.getElementById('btn-logout').addEventListener('click', async () => {
-        await fetch('/api/accounts/logout', {
-            method: 'POST',
-            headers: { 'Authorization': 'Bearer ' + sessionToken }
-        });
-
-        crypto.clearKeys();
-        sessionStorage.removeItem('session_password');
-        window.location.href = '/account/login';
-    });
-
-    // Navigation buttons
-    document.getElementById('btn-settings').addEventListener('click', () => {
-        window.location.href = '/account/settings';
-    });
-
-    document.getElementById('btn-contacts').addEventListener('click', () => {
-        window.location.href = '/contacts';
     });
 
     // Initial load
