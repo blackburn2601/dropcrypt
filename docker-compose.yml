@@ -15,19 +15,20 @@ services:
     networks:
       - dropcrypt-network
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80/"]
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:80/"]
       interval: 30s
       timeout: 3s
       retries: 3
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    # One-shot build job: installs dependencies and writes the React bundle to ./frontend/build,
+    # which nginx serves. (The Dockerfile in ./frontend is for standalone image builds.)
+    image: node:18-alpine
+    working_dir: /app
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    command: npm run build
+    command: sh -c "npm install --no-audit --no-fund --legacy-peer-deps && npm run build"
 
   php:
     build:
@@ -39,7 +40,6 @@ services:
       - ./backend/.env:/var/www/.env:ro
     environment:
       - APP_ENV=${APP_ENV:-dev}
-      - APP_SECRET=${APP_SECRET:-***REMOVED-COMPOSE_APP_SECRET***}
       - DATABASE_URL=postgresql://${DB_USER:-dropcrypt}:${DB_PASSWORD:-dropcrypt}@postgres:5432/${DB_NAME:-dropcrypt}?serverVersion=15&charset=utf8
     depends_on:
       postgres:

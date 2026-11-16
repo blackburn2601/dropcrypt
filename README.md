@@ -1,191 +1,156 @@
+<div align="center">
+
 # DropCrypt
 
-A secure, end-to-end encrypted messaging system.
+**Share a secret through a link that works once.** A message is stored under a random access token, can be read a
+single time, and is gone after it has been viewed or has expired.
 
-## Features
+![PHP](https://img.shields.io/badge/PHP-8.2-777bb4)
+![Symfony](https://img.shields.io/badge/Symfony-6.4-000000)
+![React](https://img.shields.io/badge/React-19-61dafb)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ed)
 
-- End-to-end encryption using AES-256
-- One-time view functionality
-- Self-destructing messages
-- Custom expiration times
-- Unique access tokens
+</div>
 
-## Requirements
+---
 
-- Docker
-- Docker Compose
-- Git
+## About
 
-## Quick Start
+DropCrypt is a small self-hosted service for passing a password, a key or a short note to someone without leaving it
+in a chat history. You write the message, pick an expiry time and get a link. The first person to open the link sees
+the message; every later visit, and any visit after the expiry time, gets an error.
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/dropcrypt.git
-cd dropcrypt
+It is a Symfony JSON API with a React single-page app in front, served together by nginx.
+
+## Status
+
+> **Work in progress: do not put real secrets into it yet.**
+>
+> The design goal is end-to-end encryption: the browser encrypts the message and the key travels only inside the
+> link, so the server never sees plaintext. The backend is already built for that, it stores whatever ciphertext the
+> client sends. **The React client does not encrypt yet** (encryption was moved out of the backend in
+> [`4124c89`](https://github.com/blackburn2601/dropcrypt/commit/4124c89) in preparation for it), so today the
+> content is stored exactly as typed. I checked this in the running stack: the `message` table contains the plaintext.
+>
+> The texts in the UI (About page, "End-to-End Encryption" cards, API docs) still describe the target design, not the
+> current behaviour. See [Known issues](#known-issues).
+
+What works and was checked end to end: one-time viewing, expiry, random 256-bit access tokens, the API and the
+Docker setup.
+
+## Screenshots
+
+|  |  |
+|:--:|:--:|
+| ![Create](docs/screenshots/create.png) | ![Viewed](docs/screenshots/viewed.png) |
+| **Create** — write a message, choose how long the link stays valid | **Read once** — the recipient sees the message, which is then marked as viewed |
+
+<div align="center">
+<img src="docs/screenshots/expired.png" alt="Expired or already viewed message" width="70%">
+<br><em><strong>Gone</strong> — a second visit, or a visit after the expiry time, gets an error instead of the message</em>
+</div>
+
+## How it works
+
+```
+Sender                         Server                          Recipient
+  │  POST /api/messages/create    │                                │
+  │  {content, expiresIn}  ─────▶ │  store content + random        │
+  │                               │  256-bit access token          │
+  │  ◀───────── accessToken       │                                │
+  │                               │                                │
+  │  sends link /view/<token> ──────────────────────────────────▶  │
+  │                               │  GET /api/messages/view/<token>│
+  │                               │ ◀───────────────────────────── │
+  │                               │  200 + content, marks viewed   │
+  │                               │  ───────────────────────────▶  │
+  │                               │  next request: 410 Gone        │
 ```
 
-2. Run the automated setup:
+- **Access token**: 32 random bytes from `random_bytes()`, hex encoded (64 characters), looked up by exact match.
+- **One-time read**: the first successful view sets `is_viewed`; later requests get `410 Gone`.
+- **Expiry**: the sender chooses a duration (for example `1 hour`); an expired message is deleted when it is requested
+  and answers `410 Gone`.
+- **Limits**: content up to 15 000 characters in the database column; the UI limits input to 10 000.
+
+## API
+
+| Method | Path | Body / result |
+|---|---|---|
+| `POST` | `/api/messages/create` | `{"content": "...", "expiresIn": "1 hour"}` returns `{"accessToken", "expiresAt"}` |
+| `GET` | `/api/messages/view/{accessToken}` | `200 {"content", "expiresAt"}` once, then `410`; unknown token `404` |
+
 ```bash
-./setup.sh
+curl -X POST http://localhost/api/messages/create \
+  -H 'Content-Type: application/json' \
+  -d '{"content":"hello","expiresIn":"1 hour"}'
 ```
 
-That's it! The application will be available at http://localhost
+Result of a real run against this stack: the first `GET` of the returned token answered `200`, the second `410`
+(`{"error":"Message has already been viewed"}`), and a token that never existed `404`.
 
-The setup script automatically:
-- Creates necessary environment files
-- Generates secure encryption keys
-- Builds and starts Docker containers
-- Installs all dependencies
-- Sets up the database
-- Runs migrations
+## Tech stack
 
-## Manual Setup (if needed)
+| | |
+|---|---|
+| Backend | PHP 8.2 · Symfony 6.4 · Doctrine ORM 2 · PHP-FPM · NelmioCorsBundle |
+| Frontend | React 19 · React Router 7 · Create React App |
+| Data | PostgreSQL 15 |
+| Serving | nginx (static SPA + `/api` to PHP-FPM) |
+| Packaging | Docker Compose (nginx, php, postgres and a one-shot frontend build job) |
 
-If you prefer to set up the application manually or need to customize the configuration:
+## Quick start
 
-1. Create environment files:
+Requires Docker with Compose.
+
 ```bash
+git clone git@github.com:blackburn2601/dropcrypt.git && cd dropcrypt
+
 cp backend/.env.example backend/.env
-```
+sed -i "s|^APP_SECRET=.*|APP_SECRET=$(openssl rand -hex 32)|" backend/.env
 
-2. Configure environment variables (see Environment Variables section below)
-
-3. Start the Docker containers:
-```bash
 docker compose up -d --build
 ```
 
-### Environment Variables
+Open <http://localhost>. The first start installs the frontend dependencies and builds the app, which takes a few
+minutes; database migrations run automatically when the PHP container starts. All services report healthy
+afterwards.
 
-#### Backend (.env)
-```env
-# Application
-APP_ENV=dev
-APP_SECRET=your_secret_key_here
-APP_DEBUG=1
+`setup.sh` automates the same steps (environment file, keys, containers). I did not run it for this review; the
+commands above are the ones I verified.
 
-# Database
-DB_USER=dropcrypt
-DB_PASSWORD=dropcrypt
-DB_NAME=dropcrypt
-DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}?serverVersion=15&charset=utf8"
+## Project layout
 
-# CORS Configuration
-CORS_ALLOW_ORIGIN='^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$'
-
-# Message Configuration
-MESSAGE_ENCRYPTION_KEY=your_encryption_key_here
-MESSAGE_DEFAULT_EXPIRY=24   # hours
-MESSAGE_MAX_LENGTH=10000    # characters
-
-# Rate Limiting
-RATE_LIMIT_PER_MINUTE=60
+```
+backend/
+├── src/Controller/MessageController.php   create + view endpoints
+├── src/Entity/Message.php                 content, access token, expiry, viewed flag
+├── src/Service/EncryptionService.php      AES-256-GCM helper and access-token generator
+├── src/Security/TokenAuthenticator.php
+├── migrations/                            Doctrine migrations
+└── docker/php/                            Dockerfile + entrypoint (waits for DB, migrates)
+frontend/src/                              App (create form), ViewMessage, About, Documentation, Contact
+docker/nginx/default.conf                  SPA + /api routing
+docker-compose.yml                         nginx, php, postgres, frontend build job
+setup.sh                                   optional bootstrap script
 ```
 
-Important environment variables explained:
-- `APP_SECRET`: A random string used for security purposes (min. 32 characters)
-- `APP_ENV`: Set to `dev` for development, `prod` for production
-- `APP_DEBUG`: Set to `1` for development, `0` for production
-- `DB_*`: Database connection parameters
-- `CORS_ALLOW_ORIGIN`: Regex pattern for allowed origins
-- `MESSAGE_ENCRYPTION_KEY`: Key used for message encryption (min. 32 characters)
-- `MESSAGE_DEFAULT_EXPIRY`: Default message expiration time in hours
-- `RATE_LIMIT_PER_MINUTE`: Maximum API requests per minute per IP
+## Known issues
 
-## Development
+I reviewed the code and ran the stack before writing this README. These are the open problems, most important first:
 
-The project uses a Docker-based development environment:
-
-- Backend: Symfony 6.4
-- Frontend: React
-- Database: PostgreSQL 15
-- Infrastructure: Docker with Nginx, PHP-FPM
-
-### Container Structure
-
-- **nginx**: Web server, handles both frontend and API requests
-- **php**: PHP-FPM container running the Symfony backend
-- **frontend**: Node.js container for building the React application
-- **postgres**: PostgreSQL database server
-
-### Development Tips
-
-1. **Local Development**
-   ```bash
-   # View logs
-   docker compose logs -f
-
-   # Access container shells
-   docker compose exec php bash
-   docker compose exec postgres psql -U dropcrypt -d dropcrypt
-   ```
-
-2. **Database Management**
-   ```bash
-   # Create database
-   docker compose exec php bin/console doctrine:database:create
-
-   # Run migrations
-   docker compose exec php bin/console doctrine:migrations:migrate
-
-   # Create new migration
-   docker compose exec php bin/console make:migration
-   ```
-
-3. **Cache Management**
-   ```bash
-   # Clear cache
-   docker compose exec php bin/console cache:clear
-   ```
-
-## Security Best Practices
-
-1. **Production Environment**
-   - Generate new secure keys:
-     ```bash
-     openssl rand -hex 32  # For APP_SECRET
-     openssl rand -hex 32  # For MESSAGE_ENCRYPTION_KEY
-     ```
-   - Set strict environment variables:
-     ```env
-     APP_ENV=prod
-     APP_DEBUG=0
-     CORS_ALLOW_ORIGIN='^https?://your-domain\.com$'
-     RATE_LIMIT_PER_MINUTE=30
-     ```
-
-2. **Security Headers**
-   - HTTPS only in production
-   - Strict CSP headers
-   - XSS protection enabled
-   - CSRF protection active
-
-## Troubleshooting
-
-1. **Container Issues**
-   ```bash
-   # Rebuild containers
-   docker compose down -v
-   docker compose up -d --build
-   ```
-
-2. **Permission Problems**
-   ```bash
-   # Reset file permissions
-   docker compose exec php chown -R symfony:symfony .
-   ```
-
-3. **Database Issues**
-   ```bash
-   # Check database status
-   docker compose exec postgres pg_isready -U dropcrypt
-   ```
-
-4. **Common Problems**
-   - **502 Bad Gateway**: Check if PHP-FPM is running
-   - **Database Connection Error**: Verify PostgreSQL is healthy
-   - **Missing Dependencies**: Run setup script again
+1. **Content is stored in plaintext.** No client-side encryption exists yet, see [Status](#status).
+   `EncryptionService` (AES-256-GCM) is still in the backend, but only its access-token generator is used.
+2. **The generated link ends in `?token=undefined`.** The viewer page expects an encryption key in the link, which
+   the create endpoint does not return because nothing generates one yet.
+3. **UI and API-docs copy overstates the security.** "Zero Knowledge", "End-to-End Encryption" and "AES-256"
+   describe the intended design. The documentation page still shows the base URL `https://api.dropcrypt.org`.
+4. **Settings that nothing reads.** `MESSAGE_ENCRYPTION_KEY`, `MESSAGE_DEFAULT_EXPIRY`, `MESSAGE_MAX_LENGTH` and
+   `RATE_LIMIT_PER_MINUTE` appear in the example environment, but no code uses them. There is **no rate limiting**.
+5. **No automated tests.** `backend/tests` contains only the PHPUnit bootstrap; there is no CI.
+6. **Development defaults.** `APP_ENV=dev` and the database password `dropcrypt` are meant for local use only.
 
 ## License
 
-MIT 
+MIT
